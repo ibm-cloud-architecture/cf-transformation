@@ -1,0 +1,50 @@
+---
+# base imageStream - from external repo
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    application: smp-hello-world
+  name: liberty-base
+  namespace: app-jenkins
+spec:
+  tags:
+  - name: 'kernel-rhel'
+    from:
+      kind: DockerImage
+      name: 'harbor.jkwong.cloudns.cx/ibmcom/websphere-liberty:kernel-rhel'
+---
+# target imageStream
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    application: smp-hello-world
+  name: smp-hello-world
+  namespace: liberty
+---
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  labels:
+    application: smp-hello-world
+  name: smp-hello-world
+  namespace: app-jenkins
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: smp-hello-world:latest
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: "app-jenkins"
+        name: "liberty-base:kernel-rhel"
+      dockerfilePath: Dockerfile
+      noCache: true
+      forcePull: true
+
