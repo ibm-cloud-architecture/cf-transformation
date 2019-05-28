@@ -1,0 +1,4 @@
+<server>
+  <variable name='cloud.services.ups1.connection.key1' value='value1'/>
+  <variable name='cloud.services.ups2.connection.key2' value='value2'/>
+</server>

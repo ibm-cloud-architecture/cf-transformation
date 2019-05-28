@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: smp-helloworld-template
+  annotations:
+    description: webserver31-tomcat8-openshift
+    tags: tomcat8,java8
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: smp-webserver31-tomcat8-openshift
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        description: SMP JBoss Web Server 3.1 - Tomcat8
+        iconClass: icon-jboss
+        supports: java:8
+        tags: tomcat8
+        version: "latest"
+      from:
+        kind: DockerImage
+        name: ocpstx0.smpartifactory.fg.smp.com/nightly/smptomcat:latest
+      generation: 2
+      importPolicy: {}
+      name: "latest"
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: ${APP_IS_NAME}
+    labels:
+      application: ${APP_NAME}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      build: ${APP_SMP_NAME}
+    name: ${APP_SMP_NAME}
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_IS_NAME}:${TAG}
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      dockerStrategy:
+        env:
+          - name: "APP_ARTIFACT_ID"
+            value: ${APP_ARTIFACT_ID}
+        from:
+          kind: ImageStreamTag
+          name: smp-webserver31-tomcat8-openshift:latest
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+parameters:
+  - name: APP_NAME
+    description: Application Name. To be used for the buildconfig, deploymentconfig, and pods.
+  - name: TAG
+    description: TAG for the Image
+  - name: APP_BC_NAME
+    description: Name of the build config
+  - name: APP_ARTIFACT_ID
+    description: Name of the artifact id
+  - name: APP_IS_NAME
+    description: Name of the imagestream

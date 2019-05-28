@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: dc-helloworld-template
+  annotations:
+    description: websphere-liberty-openshift
+    tags: liberty,java8
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      generation: 1
+      labels:
+        app: ${APP_NAME}
+        deploymentconfig: ${APP_DC_NAME}
+      name: ${APP_NAME}
+    spec:
+      replicas: 2
+      revisionHistoryLimit: 5
+      selector:
+        app: ${APP_NAME}
+        deploymentconfig: ${APP_DC_NAME}
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}
+            deploymentconfig: ${APP_DC_NAME}
+        spec:
+          containers:
+            - image: ${TARGET_REPO}/${TARGET_WORKSPACE}/${APP_ARTIFACT_ID}:${TAG}
+              imagePullPolicy: Always
+              name: ${APP_ARTIFACT_ID}
+              ports:
+                - containerPort: 9080
+                  protocol: TCP
+                - containerPort: 9443
+                  protocol: TCP
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers: []
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: ${APP_NAME}
+      name: ${APP_NAME}
+    spec:
+      ports:
+        - name: 9080-tcp
+          port: 9080
+          protocol: TCP
+          targetPort: 9080
+        - name: 9443-tcp
+          port: 9443
+          protocol: TCP
+          targetPort: 9443
+      selector:
+        app: ${APP_NAME}
+        deploymentconfig: ${APP_DC_NAME}
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      labels:
+        app: ${APP_NAME}
+      name: ${APP_NAME}
+    spec:
+      port:
+        targetPort: 9080-tcp
+      to:
+        kind: Service
+        name: ${APP_NAME}
+        weight: 100
+      wildcardPolicy: None
+      tls:
+        termination: edge
+parameters:
+  - name: APP_NAME
+    description: Application Name. To be used for the buildconfig, deploymentconfig, and pods.
+  - name: TAG
+    description: TAG for the Image
+  - name: APP_DC_NAME
+    description: Name of the deployment Config
+  - name: APP_ARTIFACT_ID
+    description: Name of the artifact id
+  - name: TARGET_REPO
+    description: URI to the image repository
+  - name: TARGET_WORKSPACE
+    description: path to the image in the repository

@@ -1,0 +1,11 @@
+applications:
+  - path: defaultServer
+    name: smp-hello-world
+    environment_json: {}
+    memory: 512M
+    instances: 1
+    disk_quota: 1024M
+    services:
+      - ups1
+      - ups2
+      - ups3

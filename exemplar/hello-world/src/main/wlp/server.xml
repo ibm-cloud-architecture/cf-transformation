@@ -1,0 +1,21 @@
+<server>
+    <featureManager>
+        <feature>servlet-3.1</feature>
+        <feature>jndi-1.0</feature>
+        <feature>mpHealth-1.0</feature>
+    </featureManager>
+
+    <!--
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="8080" />
+    -->
+
+    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080">
+        <tcpOptions soReuseAddr="true"/>
+    </httpEndpoint>
+    <include location="runtime-vars.xml" />
+    <jndiEntry jndiName="key1" value="${cloud.services.ups1.connection.key1}" />
+    <jndiEntry jndiName="key2" value="${cloud.services.ups2.connection.key2}" />
+
+    <application name="JavaHelloWorldApp" context-root="/" location="JavaHelloWorldApp.war" type="war"/>
+
+</server>
