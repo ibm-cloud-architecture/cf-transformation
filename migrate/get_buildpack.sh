@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 buildpack=$1
 target_path=$2

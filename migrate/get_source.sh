@@ -20,7 +20,7 @@ url="$(echo ${source_path/$proto/})"
 # extract the host
 host="$(echo $url | cut -d/ -f1)"
 # extract the path (if any)
-fullpath="$(echo $url | grep / | cut -d/ -f2-)"
+fullpath="/$(echo $url | grep / | cut -d/ -f2-)"
 path=`dirname $fullpath`
 file=`basename $fullpath`
 

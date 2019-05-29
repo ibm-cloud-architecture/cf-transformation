@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Handle arguments
 # Required:
@@ -78,17 +78,21 @@ echo "Buildpack is retrieved into ${CONVDIR}/${bpath}"
 # assume compile and release are needed
 #########################################
 
-cd $CONVDIR/$tpath
-compileOut=`$CONVDIR/$bpath/bin/compile $CONVDIR/$tpath /tmp 2>&1`
+cd ${CONVDIR}${tpath}
+compileOut=`${CONVDIR}${bpath}/bin/compile ${CONVDIR}${tpath} /tmp 2>&1`
 if [[ $? -gt 0 ]];then
   echo "Compile failed \n ${compileOut}"
   exit 30
+else
+  echo "Compile finished \n ${compileOut}"
 fi
 
-releaseOut=`$CONVDIR/$bpath/bin/release $CONVDIR/$tpath 2>&1`
+releaseOut=`${CONVDIR}${bpath}/bin/release ${CONVDIR}${tpath} 2>&1`
 if [[ $? -gt 0 ]];then
   echo "Release failed \n ${releaseOut}"
   exit 40
+else
+  echo "Release finished \n ${releaseOut}"
 fi
 
 #########################################
