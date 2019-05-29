@@ -59,7 +59,8 @@ tpath=`$CODEDIR/get_source.sh $source_path $CONVDIR`
 
 if [[ $? -gt 0 ]]; then
   echo "Cannot retrieve source from ${source_path}"
-  exit
+  echo "${tpath}"
+  exit 10
 fi
 
 echo "The source is retrieved from ${source_path} into ${CONVDIR}/${tpath}"
@@ -68,6 +69,7 @@ bpath=`$CODEDIR/get_buildpack.sh $buildpack $CONVDIR`
 
 if [[ $? -gt 0 ]]; then
   echo "Cannot retrieve buildpack for ${buildpack}"
+  echo "${bpath}"
   exit 20
 fi
 
