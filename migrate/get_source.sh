@@ -54,9 +54,31 @@ else
 fi
 
 if [[ $? -gt "0" ]]; then
+  echo "Retrieve failed"
   exit 200
 fi
 
+if [[ "$type" =~ \.(GIT|PATH)$ ]]; then
+  # find manifest.yml as the starting point for conversion
+  numman=`find $file -name manifest.yml | wc -l`
+  if [[ $numman -ne 1 ]]; then
+    echo "Cannot process multiple manifest git repo - manually clone the repo and choose the appropriate path"
+    exit 170
+  fi
+  manpath=`find $file -name manifest.yml`
+  mandir=`dirname ${manpath}`
+  if [[ $mandir -ne $file ]]; then
+    mv ${mandir} .
+    file=`basename ${mandir}`
+  fi
+  # if found pom.xml or gradle.properties do a build
+  cd $file
+  if [[ -f "pom.xml" ]]; then
+    maven clean install
+  elif [[ -f "gradle.properties ]]; then
+    gradle build
+  fi
+fi
 echo $file 
 
 exit 0
