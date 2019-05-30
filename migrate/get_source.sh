@@ -38,9 +38,9 @@ then
     # unzip for war/jar/zip/ear
     # untar for tar/tar.gz/tgz
     if [[ "$tgtfile" =~ \.(war|jar|ear|zip)$ ]]; then
-      unzip $tgtfile
+      unzip $tgtfile > /dev/null 2>&1
     elif [[ "$tgtfile" =~ \.(tar|tar.gz|tgz)$ ]]; then
-      tar -xf $tgtfile
+      tar -xf $tgtfile > /dev/null 2>&1
     fi
   else
     type="PATH"
@@ -86,6 +86,20 @@ if [[ "$type" =~ (GIT|PATH)$ ]]; then
   tgtpath=`cat $manpath | grep "path:" | awk -F'path:' '{ print $NF }' | xargs`
   if [[ ! -z "$tgtpath" ]]; then
     file=${file}/${tgtpath}
+    if [[ -f "${target_path}/${file}" ]]; then
+      mkdir ${target_path}/target
+      cd ${target_path}/target
+      cp ${target_path}/${file} .
+      tgtfile=`basename ${target_path}/${file}`
+      file="target"
+      # unzip for war/jar/zip/ear
+      # untar for tar/tar.gz/tgz
+      if [[ "$tgtfile" =~ \.(war|jar|ear|zip)$ ]]; then
+        unzip $tgtfile > /dev/null 2>&1
+      elif [[ "$tgtfile" =~ \.(tar|tar.gz|tgz)$ ]]; then
+        tar -xf $tgtfile > /dev/null 2>&1
+      fi
+    fi
   fi
 fi
 echo $file 

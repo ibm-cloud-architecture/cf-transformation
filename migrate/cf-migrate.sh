@@ -79,7 +79,7 @@ echo "Buildpack is retrieved into ${CONVDIR}/${bpath}"
 # Run the buildpack: 
 # assume compile and release are needed
 #########################################
-
+export CF_STACK="cflinuxfs3"
 cd ${CONVDIR}/${tpath}
 echo "Running from ${CONVDIR}/${tpath} ($PWD)"
 compileOut=`${CONVDIR}/${bpath}/bin/compile ${CONVDIR}/${tpath} /tmp 2>&1`

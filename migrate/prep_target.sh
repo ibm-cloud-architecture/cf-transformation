@@ -12,6 +12,9 @@ then
   if [ ! -d $target_path ]
   then
     mkdir $target_path
+  else
+    cd $target_path
+    rm -rf *
   fi
   if [ ! -d $target_path ]
   then
