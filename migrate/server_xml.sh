@@ -4,15 +4,22 @@
 # Input is the path where the artifact resides ${CONVDIR}/${tpath}
 
 source=$1
+CODEDIR=$( dirname "${BASH_SOURCE[0]}" )
+if [ $CODEDIR == "." ]; then
+  CODEDIR=`pwd`
+fi
+apptype="war"
 
 if [[ -f "${source}" ]]; then
   fn=`basename ${source}`
   source=`dirname ${source}`
 fi
 
+cd ${source}
 if [[ ! -f "${source}/server.xml" ]] ; then
   # Create default server.xml
   echo "Create default server.xml"
+  cp $CODEDIR/server.xml .
   # Insert feature manager
   xmlstarlet ed \
     -s /server -t elem -n featureManager \
@@ -25,10 +32,10 @@ if [[ ! -f "${source}/server.xml" ]] ; then
   # insert Application information
   xmlstarlet ed \
     -s /server -t elem -n application \
-    -i /server/application -t attr -n name -v "Hello" \
+    -i /server/application -t attr -n name -v "myapp" \
     -i /server/application -t attr -n context-root -v "\/" \
-    -i /server/application -t attr -n location -v "Hello.war" \
-    -i /server/application -t attr -n type -v "war" \
+    -i /server/application -t attr -n location -v "myapp.${apptype}" \
+    -i /server/application -t attr -n type -v "${apptype}" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
 else
   xmlstarlet ed \
