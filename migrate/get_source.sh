@@ -33,15 +33,7 @@ then
     mkdir target
     cd target
     cp $fullpath $file
-    tgtfile=$file
-    file="target"
-    # unzip for war/jar/zip/ear
-    # untar for tar/tar.gz/tgz
-    if [[ "$tgtfile" =~ \.(war|jar|ear|zip)$ ]]; then
-      unzip $tgtfile > /dev/null 2>&1
-    elif [[ "$tgtfile" =~ \.(tar|tar.gz|tgz)$ ]]; then
-      tar -xf $tgtfile > /dev/null 2>&1
-    fi
+    file="target/${file}"
   else
     type="PATH"
     cd $target_path
@@ -91,14 +83,7 @@ if [[ "$type" =~ (GIT|PATH)$ ]]; then
       cd ${target_path}/target
       cp ${target_path}/${file} .
       tgtfile=`basename ${target_path}/${file}`
-      file="target"
-      # unzip for war/jar/zip/ear
-      # untar for tar/tar.gz/tgz
-      if [[ "$tgtfile" =~ \.(war|jar|ear|zip)$ ]]; then
-        unzip $tgtfile > /dev/null 2>&1
-      elif [[ "$tgtfile" =~ \.(tar|tar.gz|tgz)$ ]]; then
-        tar -xf $tgtfile > /dev/null 2>&1
-      fi
+      file="target/${tgtfile}"
     fi
   fi
 fi
