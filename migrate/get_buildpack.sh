@@ -37,6 +37,8 @@ fi
 if [[ $buildpack == "ibm-websphere-liberty" ]] 
 then
   cp $CODEDIR/licenses.yml $target_path/$bprepo/config/licenses.yml
+else
+  export CF_STACK="cflinuxfs2"
 fi
 
 echo "${bprepo}"
