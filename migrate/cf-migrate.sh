@@ -77,6 +77,10 @@ echo "The source is retrieved from ${source_path} into ${CONVDIR}/${tpath}"
 #########################################
 
 if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
+  $CODEDIR/server_xml.sh $CONVDIR/${tpath}
+  VCAP_SERVICES=$(cat vcap.json)
+  export VCAP_SERVICES
+  $CODEDIR/vcap.sh 
 
 elif [[ "$buildpack" == "nodejs" ]]; then
 
