@@ -78,9 +78,11 @@ echo "The source is retrieved from ${source_path} into ${CONVDIR}/${tpath}"
 
 if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
   $CODEDIR/server_xml.sh $CONVDIR/${tpath}
-  #VCAP_SERVICES=$(cat vcap.json)
-  #export VCAP_SERVICES
-  #$CODEDIR/vcap.sh 
+  if [[ -f $CODEDIR/vcap.json ]]; then
+    VCAP_SERVICES=$(cat vcap.json)
+    export VCAP_SERVICES
+    $CODEDIR/vcap.sh 
+  fi
   echo "Complete server.xml generation"
 elif [[ "$buildpack" == "nodejs" ]]; then
   echo "nodejs"
@@ -116,6 +118,6 @@ fi
 $CODEDIR/writeout.sh $CONVDIR/${tpath} ${app_name} ${buildpack} ${tgttype}
 
 echo "Open the result file in: "
-echo $CONVDIR/$app_name/result.html
+echo $CONVDIR/$tpath/result.html
 
 exit 0

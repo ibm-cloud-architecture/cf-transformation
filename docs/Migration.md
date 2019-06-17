@@ -24,6 +24,10 @@ The tool is packaged as a GitHub repository in https://github.com/ibm-cloud-arch
 
 		cd cf-transformation/migrate
 
+3. Get the content of your application VCAP_SERVICES from Cloud Foundry:
+
+		cf env <appname> | awk '/VCAP_SERVICES/{flag=1;next} /VCAP_APPLICATION/{flag=0} flag' | sed  -e '$d' | sed -e '$d' | sed -e ‘$d’ > vcap.json
+
 3. Run the migration tool against your source:
 
 		./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type> 
