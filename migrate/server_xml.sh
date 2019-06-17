@@ -75,3 +75,5 @@ fi
     -i /server/httpDispatcher -t attr -n trustedSensitiveHeaderOrigin -v "\*" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
 
+  rm t1.xml
+

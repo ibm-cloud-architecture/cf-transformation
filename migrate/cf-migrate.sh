@@ -93,7 +93,7 @@ fi
 # Create docker file
 #########################################
 
-app_name=`basename ${source_path}`
+app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk '{print $2}')
 
 $CODEDIR/create_dockerfile.sh $CONVDIR/${tpath} ${buildpack}
 
@@ -113,7 +113,7 @@ fi
 # finalize output
 #########################################
 
-$CODEDIR/writeout.sh $CONVDIR/${app_name} ${app_name} ${buildpack} ${tgttype}
+$CODEDIR/writeout.sh $CONVDIR/${tpath} ${app_name} ${buildpack} ${tgttype}
 
 echo "Open the result file in: "
 echo $CONVDIR/$app_name/result.html
