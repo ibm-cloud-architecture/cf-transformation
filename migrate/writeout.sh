@@ -14,11 +14,7 @@ fi
 # Read result.html and write out result.html 
 IFS=$'\n'       # make newlines the only separator
 
-files=""
-for ll in $(ls $TGTPATH)
-do
-  files="$files<LI>$ll</LI>"
-done 
+files=$(cat $TGTPATH/genfiles.txt)
 
 for line in $(cat $CODEDIR/result.html)    
 do

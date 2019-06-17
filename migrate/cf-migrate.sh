@@ -76,16 +76,32 @@ echo "The source is retrieved from ${source_path} into ${CONVDIR}/${tpath}"
 # Generate additional necessary files
 #########################################
 
+genfiles=""
+
 if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
   $CODEDIR/server_xml.sh $CONVDIR/${tpath}
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
     $CODEDIR/vcap-liberty.sh ${CONVDIR}/${tpath}
+    genfiles="$genfiles<LI>runtime-vars.xml: environment variables for WebSphere Liberty</LI>
   fi
+  genfiles="$genfiles<LI>server.xml: WebSphere Liberty main configuration file</LI>
   echo "Complete server.xml generation"
+elif [[ "$buildpack" == "java" ]]; then
+  if [[ -f $CODEDIR/vcap.json ]]; then
+    VCAP_SERVICES=$(cat vcap.json)
+    export VCAP_SERVICES
+    $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
+    genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>
+  fi
 elif [[ "$buildpack" == "nodejs" ]]; then
-  echo "nodejs"
+  if [[ -f $CODEDIR/vcap.json ]]; then
+    VCAP_SERVICES=$(cat vcap.json)
+    export VCAP_SERVICES
+    $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
+    genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>
+  fi
 elif [[ "$buildpack" == "php" ]]; then
   echo "php"
 fi
@@ -104,7 +120,9 @@ if [[ $? -gt 0 ]]; then
   exit 40
 fi
 
-$CODEDIR/create_yaml.sh $CONVDIR/${tpath}
+genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
+
+$CODEDIR/create_yaml.sh $CONVDIR/${tpath} ${target_env}
 
 if [[ $? -gt 0 ]]; then
   echo "Yaml file creation failed"
@@ -115,7 +133,11 @@ fi
 # finalize output
 #########################################
 
+echo $genfiles > $CONVDIR/$tpath/genfiles.txt
+
 $CODEDIR/writeout.sh $CONVDIR/${tpath} ${app_name} ${buildpack} ${tgttype}
+
+rm $CONVDIR/$tpath/genfiles.txt
 
 echo "Open the result file in: "
 echo $CONVDIR/$tpath/result.html
