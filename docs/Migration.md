@@ -1,4 +1,4 @@
-#CF Migration tool - README
+# CF Migration tool - README
 
 This tool assists you in migrating CloudFoundry application to Kubernetes based platform.
 
