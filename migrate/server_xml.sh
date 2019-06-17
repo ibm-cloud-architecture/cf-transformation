@@ -46,16 +46,17 @@ fi
   echo "Performing server.xml mods"
   # insert webContainer
   xmlstarlet ed \
+    -s /server -t elem -n webContainer \
     -i /server/webContainer -t attr -n trustHostHeaderPort -v true \
     -i /server/webContainer -t attr -n extractHostHeaderPort -v true \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # insert http and https endpoint
-  xmlstarlet ed \
-    -s /server -t elem -n httpEndpoint \
-    -i /server/httpEndpoint -t attr -n id -v defaultHttpEndpoint \
-    -i /server/httpEndpoint -t attr -n host -v "*" \
-    -i /server/httpEndpoint -t attr -n httpPort -v "\${port}" \
-    server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
+#  xmlstarlet ed \
+#    -s /server -t elem -n httpEndpoint \
+#    -i /server/httpEndpoint -t attr -n id -v defaultHttpEndpoint \
+#    -i /server/httpEndpoint -t attr -n host -v "*" \
+#    -i /server/httpEndpoint -t attr -n httpPort -v "\${port}" \
+#    server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # insert runtime-vars
   xmlstarlet ed \
     -s /server -t elem -n include \
