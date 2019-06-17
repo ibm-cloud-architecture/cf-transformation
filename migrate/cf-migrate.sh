@@ -6,6 +6,7 @@
 # Optional:
 # -b: buildpack name (default: ibm-websphere-liberty)
 # -t: Target (temp) directory (default: /tmp/convdir)
+# -e: Target environment (default: openshift; option openshift, iks, icp)
 # . . . (wait for Dave, if he needs more options
 
 
@@ -13,6 +14,7 @@ while [[ "$#" -gt 0 ]]; do case $1 in
   -t) target_path="$2"; shift;;
   -b) buildpack="$2";shift;;
   -s) source_path="$2";shift;;
+  -e) target_env="$2";shift;;
   *) echo "Unknown parameter passed: $1"; exit 1;;
 esac; shift; done
 
@@ -23,6 +25,11 @@ fi
 if [ -z "$buildpack" ]; then
   buildpack="ibm-websphere-liberty"
 fi
+
+if [ -z "$target_env" ]; then
+  target_env="openshift"
+fi
+
 
 # Migrate cf application
 
@@ -65,37 +72,16 @@ fi
 
 echo "The source is retrieved from ${source_path} into ${CONVDIR}/${tpath}"
 
-bpath=`$CODEDIR/get_buildpack.sh $buildpack $CONVDIR`
-
-if [[ $? -gt 0 ]]; then
-  echo "Cannot retrieve buildpack for ${buildpack}"
-  echo "${bpath}"
-  exit 20
-fi
-
-echo "Buildpack is retrieved into ${CONVDIR}/${bpath}"
-
 #########################################
-# Run the buildpack: 
-# assume compile and release are needed
+# Generate additional necessary files
 #########################################
-export CF_STACK="cflinuxfs3"
-cd ${CONVDIR}/${tpath}
-echo "Running from ${CONVDIR}/${tpath} ($PWD)"
-compileOut=`${CONVDIR}/${bpath}/bin/compile ${CONVDIR}/${tpath} /tmp 2>&1`
-if [[ $? -gt 0 ]];then
-  echo "Compile failed \n ${compileOut}"
-  exit 30
-else
-  echo "Compile finished \n ${compileOut}"
-fi
 
-releaseOut=`${CONVDIR}/${bpath}/bin/release ${CONVDIR}/${tpath} 2>&1`
-if [[ $? -gt 0 ]];then
-  echo "Release failed \n ${releaseOut}"
-  exit 40
-else
-  echo "Release finished \n ${releaseOut}"
+if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
+
+elif [[ "$buildpack" == "nodejs" ]]; then
+
+elif [[ "$buildpack" == "" ]]; then
+
 fi
 
 #########################################
@@ -103,14 +89,16 @@ fi
 # Create docker file
 #########################################
 
-$CODEDIR/create_dockerfile.sh $CONVDIR
+app_name=`basename ${source_path}`
+
+$CODEDIR/create_dockerfile.sh $CONVDIR/${tpath} ${buildpack}
 
 if [[ $? -gt 0 ]]; then
   echo "Dockerfile creation failed"
   exit 40
 fi
 
-$CODEDIR/create_yaml.sh $CONVDIR
+$CODEDIR/create_yaml.sh $CONVDIR/${tpath}
 
 if [[ $? -gt 0 ]]; then
   echo "Yaml file creation failed"
@@ -121,9 +109,9 @@ fi
 # finalize output
 #########################################
 
-echo "Output file structure is: "
-tree $CONVDIR
-echo "\n\nConversion is done, you can deploy application using the following commands"
-echo " ... "
+$CODEDIR/writeout.sh $CONVDIR/${app_name} ${app_name} ${buildpack} ${tgttype}
+
+echo "Open the result file in: "
+echo $CONVDIR/$app_name/result.html
 
 exit 0
