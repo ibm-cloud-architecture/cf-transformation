@@ -12,6 +12,8 @@ The approach that we take is meant to help you transition into a full Kubernetes
 - Dockerfile to generate the image
 - YAML configuration files to deploy to Kubernetes
 
+If you are interested in the concepts behind the migration from CloudFoundry to Kubernetes, see [Migration](migration.md).
+
 ## The tool
 
 The tool is packaged as a GitHub repository in https://github.com/ibm-cloud-architecture/cf-transformation. Sample applications are provided in the exemplar directory. 
