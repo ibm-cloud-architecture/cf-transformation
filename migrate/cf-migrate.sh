@@ -81,7 +81,7 @@ if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
-    $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
+    $CODEDIR/vcap-liberty.sh ${CONVDIR}/${tpath}
   fi
   echo "Complete server.xml generation"
 elif [[ "$buildpack" == "nodejs" ]]; then

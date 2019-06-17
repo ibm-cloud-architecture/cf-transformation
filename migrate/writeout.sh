@@ -13,10 +13,17 @@ fi
 
 # Read result.html and write out result.html 
 IFS=$'\n'       # make newlines the only separator
+
+files=""
+for ll in $(ls $TGTPATH)
+do
+  files="$files<LI>$ll</LI>"
+done 
+
 for line in $(cat $CODEDIR/result.html)    
 do
   if [[ "$line" == ":genfiles." ]]; then
-    ls $TGTPATH
+    echo $files
   else
     line=$(echo $line | sed -e "s/\:applname./$APPLNAME/g" | sed -e "s/\:appltype./$APPLTYPE/g" | sed -e "s,\:tgtdir.,$TGTPATH,g" | sed -e "s/\:tgttype./$TGTTYPE/g")
     echo "$line"
