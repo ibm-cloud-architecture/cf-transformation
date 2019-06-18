@@ -80,10 +80,13 @@ if [[ "$type" =~ (GIT|PATH)$ ]]; then
     file=${file}/${tgtpath}
     if [[ -f "${target_path}/${file}" ]]; then
       mkdir ${target_path}/target
+      cp ${manpath} ${target_path}/target
       cd ${target_path}/target
       cp ${target_path}/${file} .
       tgtfile=`basename ${target_path}/${file}`
       file="target/${tgtfile}"
+    else
+      cp ${manpath} ${target_path}/${file}
     fi
   fi
 fi

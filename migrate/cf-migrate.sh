@@ -120,7 +120,9 @@ fi
 #########################################
 
 if [[ -f "${source_path}/manifest.yml" ]]; then 
-  app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk '{print $2}')
+  app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
+elif [[ -f "${TARGETDIR}/manifest.yml" ]]; then 
+  app_name=$(cat ${TARGETDIR}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
 elif [[ "$TARGETFILE" != "" ]]; then
   app_name="${TARGETFILE%.*}"
 else
