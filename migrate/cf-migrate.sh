@@ -84,23 +84,23 @@ if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
     $CODEDIR/vcap-liberty.sh ${CONVDIR}/${tpath}
-    genfiles="$genfiles<LI>runtime-vars.xml: environment variables for WebSphere Liberty</LI>
+    genfiles="$genfiles<LI>runtime-vars.xml: environment variables for WebSphere Liberty</LI>"
   fi
-  genfiles="$genfiles<LI>server.xml: WebSphere Liberty main configuration file</LI>
+  genfiles="$genfiles<LI>server.xml: WebSphere Liberty main configuration file</LI>"
   echo "Complete server.xml generation"
 elif [[ "$buildpack" == "java" ]]; then
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
     $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
-    genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>
+    genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>"
   fi
 elif [[ "$buildpack" == "nodejs" ]]; then
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
     $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
-    genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>
+    genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>"
   fi
 elif [[ "$buildpack" == "php" ]]; then
   echo "php"
@@ -135,7 +135,7 @@ fi
 
 echo $genfiles > $CONVDIR/$tpath/genfiles.txt
 
-$CODEDIR/writeout.sh $CONVDIR/${tpath} ${app_name} ${buildpack} ${tgttype}
+$CODEDIR/writeout.sh $CONVDIR/${tpath} ${app_name} ${buildpack} ${target_env}
 
 rm $CONVDIR/$tpath/genfiles.txt
 
