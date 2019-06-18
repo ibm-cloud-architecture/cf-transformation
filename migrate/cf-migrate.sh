@@ -76,14 +76,22 @@ echo "The source is retrieved from ${source_path} into ${CONVDIR}/${tpath}"
 # Generate additional necessary files
 #########################################
 
+if [[ -f ${CONVDIR}/${tpath} ]]; then
+  TARGETDIR=$(dirname ${CONVDIR}/${tpath})
+  TARGETFILE=$(basename ${CONVDIR}/${tpath})
+else
+  TARGETFILE=""
+  TARGETDIR=${CONVDIR}/${tpath}
+fi
+
 genfiles=""
 
 if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
-  $CODEDIR/server_xml.sh $CONVDIR/${tpath}
+  $CODEDIR/server_xml.sh ${TARGETDIR}
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
-    $CODEDIR/vcap-liberty.sh ${CONVDIR}/${tpath}
+    $CODEDIR/vcap-liberty.sh ${TARGETDIR}
     genfiles="$genfiles<LI>runtime-vars.xml: environment variables for WebSphere Liberty</LI>"
   fi
   genfiles="$genfiles<LI>server.xml: WebSphere Liberty main configuration file</LI>"
@@ -92,14 +100,14 @@ elif [[ "$buildpack" == "java" ]]; then
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
-    $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
+    $CODEDIR/vcap.sh ${TARGETDIR}
     genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>"
   fi
 elif [[ "$buildpack" == "nodejs" ]]; then
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
     export VCAP_SERVICES
-    $CODEDIR/vcap.sh ${CONVDIR}/${tpath}
+    $CODEDIR/vcap.sh ${TARGETDIR}
     genfiles="$genfiles<LI>vcap.json: Dumped VCAP_SERVICES that can be loaded as Environment variable in Dockerfile or YAML</LI>"
   fi
 elif [[ "$buildpack" == "php" ]]; then
@@ -111,9 +119,15 @@ fi
 # Create docker file
 #########################################
 
-app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk '{print $2}')
+if [[ -f "${source_path}/manifest.yml" ]]; then 
+  app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk '{print $2}')
+elif [[ "$TARGETFILE" != "" ]]; then
+  app_name="${TARGETFILE%.*}"
+else
+  app_name=$(basename ${TARGETPATH})
+fi
 
-$CODEDIR/create_dockerfile.sh $CONVDIR/${tpath} ${buildpack}
+$CODEDIR/create_dockerfile.sh ${TARGETDIR} ${buildpack}
 
 if [[ $? -gt 0 ]]; then
   echo "Dockerfile creation failed"
@@ -122,7 +136,7 @@ fi
 
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
 
-$CODEDIR/create_yaml.sh $CONVDIR/${tpath} ${target_env}
+$CODEDIR/create_yaml.sh ${TARGETDIR} ${target_env}
 
 if [[ $? -gt 0 ]]; then
   echo "Yaml file creation failed"
@@ -133,13 +147,13 @@ fi
 # finalize output
 #########################################
 
-echo $genfiles > $CONVDIR/$tpath/genfiles.txt
+echo $genfiles > ${TARGETDIR}/genfiles.txt
 
-$CODEDIR/writeout.sh $CONVDIR/${tpath} ${app_name} ${buildpack} ${target_env}
+$CODEDIR/writeout.sh ${TARGETDIR} ${app_name} ${buildpack} ${target_env}
 
-rm $CONVDIR/$tpath/genfiles.txt
+rm ${TARGETDIR}/genfiles.txt
 
 echo "Open the result file in: "
-echo $CONVDIR/$tpath/result.html
+echo ${TARGETDIR}/result.html
 
 exit 0

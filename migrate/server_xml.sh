@@ -33,7 +33,7 @@ if [[ ! -f "${source}/server.xml" ]] ; then
   xmlstarlet ed \
     -s /server -t elem -n application \
     -i /server/application -t attr -n name -v "myapp" \
-    -i /server/application -t attr -n context-root -v "\/" \
+    -i /server/application -t attr -n context-root -v "/" \
     -i /server/application -t attr -n location -v "myapp.${apptype}" \
     -i /server/application -t attr -n type -v "${apptype}" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
@@ -72,7 +72,7 @@ fi
   xmlstarlet ed \
     -s /server -t elem -n httpDispatcher \
     -i /server/httpDispatcher -t attr -n enableWelcomePage -v false \
-    -i /server/httpDispatcher -t attr -n trustedSensitiveHeaderOrigin -v "\*" \
+    -i /server/httpDispatcher -t attr -n trustedSensitiveHeaderOrigin -v "*" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
 
   rm t1.xml
