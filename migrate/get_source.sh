@@ -67,8 +67,8 @@ if [[ "$type" =~ (GIT|PATH)$ ]]; then
   cd $file
   if [[ -f "pom.xml" ]]; then
     buildOut=`mvn clean install 2>&1`
-  elif [[ -f "gradle.properties" ]]; then
-    buildOut=`gradle build 2>1`
+  elif [[ -f "build.gradle" ]]; then
+    buildOut=`gradle build  2>1`
   fi
   if [[ $? -gt "0" ]];  then
     echo $buildOut
