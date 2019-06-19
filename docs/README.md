@@ -16,7 +16,18 @@ If you are interested in the concepts behind the migration from CloudFoundry to 
 
 ## The tool
 
-The tool is packaged as a GitHub repository in https://github.com/ibm-cloud-architecture/cf-transformation. Sample applications are provided in the exemplar directory. 
+The tool is packaged as a GitHub repository in https://github.com/ibm-cloud-architecture/cf-transformation. Sample applications are provided in the exemplar directory. This tool requires the following pre-requisites:
+
+- bash
+- jq
+- git
+- curl
+- xmlstarlet
+- maven or gradle 
+
+You can run this tool using a Docker container, see [docker](docker.md).
+
+To run the tool, perform the following:
 
 1. Download the tool from GitHub:
 
@@ -41,7 +52,10 @@ The tool is packaged as a GitHub repository in https://github.com/ibm-cloud-arch
 		- `-e` target environment: openshift, iks or icp
 
 
+To be able to successfully perform the rest of the migration, you will need: 
 
+- kubectl and CLI access to the kubernetes environment
+- Access to the cloud Foundry environment
 
 ## The output
 

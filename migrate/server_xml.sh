@@ -55,7 +55,7 @@ fi
     -s /server -t elem -n httpEndpoint \
     -i /server/httpEndpoint -t attr -n id -v "defaultHttpEndpoint" \
     -i /server/httpEndpoint -t attr -n host -v "*" \
-    -i /server/httpEndpoint -t attr -n httpPort -v "\${port}" \
+    -i /server/httpEndpoint -t attr -n httpPort -v "9080" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # insert runtime-vars
   xmlstarlet ed \
@@ -66,7 +66,7 @@ fi
   xmlstarlet ed \
     -s /server -t elem -n logging \
     -i /server/logging -t attr -n consoleLogLevel -v INFO \
-    -i /server/logging -t attr -n logDirectory -v "\${logdir}" \
+    -i /server/logging -t attr -n logDirectory -v "logs" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # disable welcome page
   xmlstarlet ed \
