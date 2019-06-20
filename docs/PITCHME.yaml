@@ -1,0 +1,8 @@
+# Layout
+layout : center-right
+
+# Look-and-Feel
+logo : docs/images/cloud.png
+theme : template
+theme-override : docs/css/PITCHME.css
+
