@@ -11,7 +11,7 @@
 
 ---
 ## CloudFoundry application architecture
-![IMAGE](images/cf.PNG)
+![IMAGE](docs/images/cf.PNG)
 ---
 
 ## Kubernetes application architecture
