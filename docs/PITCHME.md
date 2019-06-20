@@ -17,7 +17,9 @@
 ## Kubernetes application architecture
 ![IMAGE](images/kube.PNG)
 ---
-
+@snap[north text-09]
+## Application Staging 
+@snapend
 @snap[west span-50 text-06]
 ### CloudFoundry
 All the following are performed by cf push
