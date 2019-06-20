@@ -26,10 +26,10 @@ All the following are performed by `cf push`
 @ul[](false)
 - The CLI uploads application artifacts to CloudFoundry
 - CloudFoundry selects the appropriate BuildPack
-- BuildPack prepares the artifacts to create a runnable unit (*Droplet*)
-- CloudFoundry stores the Droplet in the *Blob store*
-- CloudFoundry deploys the Droplet into its Runtime as a *Garden Container* and provides VCAP_SERVICES to access backend services
-- CloudFoundry associates the appropriate *Router entry*
+- BuildPack prepares the artifacts to create a runnable unit (**Droplet**)
+- CloudFoundry stores the Droplet in the **Blob store**
+- CloudFoundry deploys the Droplet into its Runtime as a **Garden Container** and provides VCAP_SERVICES to access backend services
+- CloudFoundry associates the appropriate **Router entry**
 @ulend
 @snapend
 
@@ -37,10 +37,10 @@ All the following are performed by `cf push`
 ### Kubernetes
 @ul[](false)
 - Build and assemble the necessary deployment artifacts
-- Create a *docker image* using a Dockerfile and store the image in a *Docker repository*<br/>`docker build …`<br/>`docker push …`
+- Create a **docker image** using a Dockerfile and store the image in a **Docker repository**<br/>`docker build …`<br/>`docker push …`
 - Create ConfigMap and Secrets to access backend services
-- Use deployment YAML to deploy docker image into a *Kubernetes Pod* in a Deployment or DeploymentConfig<br/>`kubectl apply -f …`
-- Use the Service YAML to associate the pods to a *Kubernetes Service* and optionally define it to an *Ingress* or *OpenShift Route*<br/>`kubectl apply -f …`
+- Use deployment YAML to deploy docker image into a **Kubernetes Pod** in a Deployment or DeploymentConfig<br/>`kubectl apply -f …`
+- Use the Service YAML to associate the pods to a **Kubernetes Service** and optionally define it to an **Ingress** or **OpenShift Route**<br/>`kubectl apply -f …`
 @ulend
 @snapend
 
@@ -59,13 +59,14 @@ All the following are performed by `cf push`
 
 ## Migration scripts
 
-- The cf-migrate flow (Runtime/Buildpack specific):
+The cf-migrate flow (Runtime/Buildpack specific):
+
 - Extract application artifact (get_source.sh)
-- Generate application configuration (server_xml.sh and vcap-liberty.sh for liberty)
+- Generate application configuration (server_xml.sh and vcap-liberty.sh for liberty; vcap.sh for all others)
 - Generate Dockerfile (create_dockerfile.sh)
 - Generate deployment yaml files (create_yaml.sh)
 - Generate Jenkinsfile (not in MVP)
-- Produce readme of what artifacts are produced and how to invoke the deployments
+- Produce readme of what artifacts are produced and how to invoke the deployments (writeout.sh)
 
 
 ---
@@ -80,27 +81,26 @@ All the following are performed by `cf push`
 	- xmlstarlet
 	- maven or gradle
 - Or use the provided Docker image: ibmcloudacademy/cfmigrationtool
-	- Get the container image:
-docker pull ibmcloudacademy/cfmigrationtool 
-	- Use a path from the host that you will use to store the output, assuming that you use /Users/ibmuser/data:
-docker run --net=host -v /Users/ibmuser/data:/data -it ibmcloudacademy/cfmigrationtool bash
+	- Get the container image: <br/>`docker pull ibmcloudacademy/cfmigrationtool` 
+	- Use a path from the host that you will use to store the output, assuming that you use /Users/ibmuser/data:<br/>
+`docker run --net=host -v /Users/ibmuser/data:/data -it ibmcloudacademy/cfmigrationtool bash`
 ---
 
 ## Running migration tool
 
-- Download the tool from GitHub:
-git clone https://github.com/ibm-cloud-architecture/cf-transformation 
-- Change the directory to the migrate sub-directory:
-cd cf-transformation/migrate 
-- Get the content of your application VCAP_SERVICES from Cloud Foundry (optional):
-cf env <appname>  > vcap.json  
-- Run the migration tool against your source:
-./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type> 
+- Download the tool from GitHub:<br/>
+`git clone https://github.com/ibm-cloud-architecture/cf-transformation` 
+- Change the directory to the migrate sub-directory:<br/>
+`cd cf-transformation/migrate `
+- Get the content of your application VCAP_SERVICES from Cloud Foundry (optional):<br/>
+`cf env <appname>  > vcap.json`  
+- Run the migration tool against your source:<br/>
+`./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type>` 
 
-	- -s: migration source, can be local path or a HTTPS git repository link
-	- -t: the processing and result path, useful for defining container shared path
-	- -b: application or buildpack type (ibm-websphere-liberty, java, nodejs)
-	- -e: target type (openstack, iks, icp)	
+	- `-s`: migration source, can be local path or a HTTPS git repository link
+	- `-t`: the processing and result path, useful for defining container shared path
+	- `-b`: application or buildpack type (ibm-websphere-liberty, java, nodejs)
+	- `-e`: target type (openstack, iks, icp)	
 
 ---
 
