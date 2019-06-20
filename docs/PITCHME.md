@@ -15,7 +15,7 @@
 ---
 
 ## Kubernetes application architecture
-![IMAGE](images/kube.PNG)
+![IMAGE](docs/images/kube.PNG)
 ---
 @snap[north span-99 text-09]
 ## Application Staging 
