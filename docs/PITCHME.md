@@ -18,7 +18,7 @@
 ![IMAGE](images/kube.PNG)
 ---
 
-@snap[north span-15]
+@snap[north text-05]
 ## Application Staging process 
 @snapend
 @snap[west span-50]
