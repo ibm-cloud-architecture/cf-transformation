@@ -18,7 +18,9 @@
 ![IMAGE](images/kube.PNG)
 ---
 
+@snap[north span-15]
 ## Application Staging process 
+@snapend
 @snap[west span-50]
 ### CloudFoundry
 All the following are performed by cf push
