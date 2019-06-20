@@ -48,18 +48,64 @@ All the following are performed by cf push
 
 ## Migration approach
 
+
+- Allow developer to understand the process to deploy in Kubernetes
+- Build additional configuration files that should not change much provided the application is not changed significantly
+- Let developer to deploy manually to Kubernetes or load the process to automatically deploy using Jenkins pipeline
+- Prevent automation to create generic migration tool to have a CF application run directly in Kubernetes using buildpack simulation (ie https://buildpacks.io)
+- Tools should be run just once when developer need a quick jump-start into Kubernetes
+
 ---
 
 ## Migration scripts
+
+- The cf-migrate flow (Runtime/Buildpack specific):
+- Extract application artifact (get_source.sh)
+- Generate application configuration (server_xml.sh and vcap-liberty.sh for liberty)
+- Generate Dockerfile (create_dockerfile.sh)
+- Generate deployment yaml files (create_yaml.sh)
+- Generate Jenkinsfile (not in MVP)
+- Produce readme of what artifacts are produced and how to invoke the deployments
+
 
 ---
 
 ## Migration tool prerequisites
 
+- Prerequisites:
+	- bash
+	- jq
+	- git
+	- curl
+	- xmlstarlet
+	- maven or gradle
+- Or use the provided Docker image: ibmcloudacademy/cfmigrationtool
+	- Get the container image:
+docker pull ibmcloudacademy/cfmigrationtool 
+	- Use a path from the host that you will use to store the output, assuming that you use /Users/ibmuser/data:
+docker run --net=host -v /Users/ibmuser/data:/data -it ibmcloudacademy/cfmigrationtool bash
 ---
 
 ## Running migration tool
 
+- Download the tool from GitHub:
+git clone https://github.com/ibm-cloud-architecture/cf-transformation 
+- Change the directory to the migrate sub-directory:
+cd cf-transformation/migrate 
+- Get the content of your application VCAP_SERVICES from Cloud Foundry (optional):
+cf env <appname>  > vcap.json  
+- Run the migration tool against your source:
+./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type> 
+
+	- -s: migration source, can be local path or a HTTPS git repository link
+	- -t: the processing and result path, useful for defining container shared path
+	- -b: application or buildpack type (ibm-websphere-liberty, java, nodejs)
+	- -e: target type (openstack, iks, icp)	
+
 ---
 
 ## Sample output
+
+
+![IMAGE](docs/images/toolrun.PNG)
+![IMAGE](docs/images/result.PNG)
