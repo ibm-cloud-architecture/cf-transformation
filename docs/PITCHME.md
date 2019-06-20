@@ -18,10 +18,7 @@
 ![IMAGE](images/kube.PNG)
 ---
 
-@snap[north text-05]
-## Application Staging process 
-@snapend
-@snap[west span-50]
+@snap[west span-50 text-08]
 ### CloudFoundry
 All the following are performed by cf push
 @ul
@@ -34,7 +31,7 @@ All the following are performed by cf push
 @ulend
 @snapend
 
-@snap[east span-50]
+@snap[east span-50 text-08]
 ### Kubernetes
 @ul
 - Build and assemble the necessary deployment artifacts
