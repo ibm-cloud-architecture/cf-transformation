@@ -2,7 +2,7 @@
 layout : center-right
 
 # Look-and-Feel
-logo : docs/images/cloud.png
+logo : images/cloud.png
 theme : template
-theme-override : docs/css/PITCHME.css
+theme-override : css/PITCHME.css
 
