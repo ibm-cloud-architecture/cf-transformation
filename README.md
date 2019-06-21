@@ -46,10 +46,10 @@ To run the tool, perform the following:
 		./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type>
 
 	Where:
-		- `-s` source path or source git repository URL
-		- `-t` the temporary conversion directory where the work and output will be performed (default: /tmp/convdir)
-		- `-b` the application type (buildpack) ibm-websphere-liberty, java, nodejs etc
-		- `-e` target environment: openshift, iks or icp
+			- `-s` source path or source git repository URL
+			- `-t` the temporary conversion directory where the work and output will be performed (default: /tmp/convdir)
+			- `-b` the application type (buildpack) ibm-websphere-liberty, java, nodejs etc
+			- `-e` target environment: openshift, iks or icp
 
 
 To be able to successfully perform the rest of the migration, you will need:

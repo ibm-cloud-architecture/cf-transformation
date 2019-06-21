@@ -21,18 +21,18 @@ do
   if [[ "$line" == ":genfiles." ]]; then
     echo $files
   elif [[ "$line" == ":deployapp." ]]; then
-    if [[ "&TGTTYPE" == "openshift" ]]; then
+    if [[ "$TGTTYPE" == "openshift" ]]; then
       echo "<LI>Login to OpenShift"
       echo "<XMP>oc login </XMP>"
       echo "<LI>Create application from the deploy template"
-      echo "<XMP>oc new-app -f openshift/deploy-template.yaml -p &lt.var&gt.=&lt.value&gt.</XMP>"
+      echo "<XMP>oc new-app -f openshift/deploy-template.yaml -p var=value</XMP>"
     else
-      if [[ "&TGTTYPE" == "iks" ]]; then
+      if [[ "$TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"
         echo "<XMP>ibmcloud login</XMP>"
         echo "<XMP>ibmcloud ks cluster-config <clustername></XMP>"
         echo "<XMP>export KUBECONFIG=<configfile></XMP>"
-      elif [[ "&TGTTYPE" == "icp" ]]; then
+      elif [[ "$TGTTYPE" == "icp" ]]; then
         echo "<LI>Login to IBM Cloud Private"
         echo "<XMP>cloudctl login</XMP>"
       else 
