@@ -100,7 +100,7 @@ The cf-migrate flow (Runtime/Buildpack specific):
 	- `-s`: migration source, can be local path or a HTTPS git repository link
 	- `-t`: the processing and result path, useful for defining container shared path
 	- `-b`: application or buildpack type (ibm-websphere-liberty, java, nodejs)
-	- `-e`: target type (openstack, iks, icp)	
+	- `-e`: target type (openshift, iks, icp)	
 
 ---
 
