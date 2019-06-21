@@ -138,7 +138,9 @@ fi
 
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
 
-$CODEDIR/create_yaml.sh ${TARGETDIR} ${target_env}
+yaml_app_name=$(basename $source_path)
+
+$CODEDIR/create_yaml.sh ${TARGETDIR} ${yaml_app_name}
 
 if [[ $? -gt 0 ]]; then
   echo "Yaml file creation failed"
@@ -151,7 +153,7 @@ fi
 
 echo $genfiles > ${TARGETDIR}/genfiles.txt
 
-$CODEDIR/writeout.sh ${TARGETDIR} ${app_name} ${buildpack} ${target_env}
+$CODEDIR/writeout.sh ${TARGETDIR} ${yaml_app_name} ${buildpack} ${target_env}
 
 rm ${TARGETDIR}/genfiles.txt
 
