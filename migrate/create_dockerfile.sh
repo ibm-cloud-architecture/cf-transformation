@@ -64,9 +64,10 @@ case ${buildpack_name} in
   *nodejs*)
     echo "FROM node" >> ${dockerfile}
     echo "RUN mkdir /app" >> ${dockerfile}
-    echo "COPY package*.json /app" >> ${dockerfile}
+    echo "COPY . /app" >> ${dockerfile}
+    echo "WORKDIR /app" >> ${dockerfile}
     echo "RUN cd /app;npm install" >> ${dockerfile}
-    echo "CMD cd /app;npm start" >> ${dockerfile}
+    echo "CMD npm start" >> ${dockerfile}
     echo " " >> ${dockerfile}
     ;;
 
