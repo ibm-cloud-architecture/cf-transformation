@@ -24,10 +24,8 @@ do
     if [[ "&TGTTYPE" == "openshift" ]]; then
       echo "<LI>Login to OpenShift"
       echo "<XMP>oc login </XMP>"
-      echo "<LI>Create the build template"
-      echo "<XMP>oc -f openshift/build-template.yaml</XMP>"
-      echo "<LI>Create the deploy template"
-      echo "<XMP>oc -f openshift/deploy-template.yaml</XMP>"
+      echo "<LI>Create application from the deploy template"
+      echo "<XMP>oc new-app -f openshift/deploy-template.yaml -p &lt.var&gt.=&lt.value&gt.</XMP>"
     else
       if [[ "&TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"
