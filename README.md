@@ -72,6 +72,6 @@ You can run the commands listed in the result.html to deploy your application to
 
 The following are specific output and recommendation for different application types (Buildpacks):
 
-- [ibm-websphere-liberty](liberty.md)
-- [nodejs](nodejs.md)
-- [java springboot](java.md)
+- [ibm-websphere-liberty](docs/liberty.md)
+- [nodejs](docs/nodejs.md)
+- [java springboot](docs/java.md)
