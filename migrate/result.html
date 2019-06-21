@@ -1,0 +1,26 @@
+<HTML>
+<HEAD>
+<TITLE>CloudFoundry migration tool</TITLE>
+</HEAD>
+<BODY>
+<H1>CloudFoundry Migration Tool</H1>
+<P>This migration tool is run against the application :applname. of type :appltype..</P>
+<H2>Generated files</H2>
+<P>These are the files that are stored in :tgtdir.. Some of these files may have to be modified manually as listed below:</P>
+<UL>
+:genfiles.
+</UL>
+<H2>Deploying application to :tgttype.</H2>
+<P>Perform the following actions:</P>
+<OL>
+<LI>Go to the conversion path directory <XMP>cd :tgtdir.</XMP>
+<LI>Generate the docker image:<XMP>docker build -t :applname. .</XMP>
+<LI>Tag the docker image for a docker repository that is accessible to the cluster.<XMP>docker tag :applname. <registry>/<namespace>/:applname.</XMP>
+<LI>Store the docker image into a docker repository that is accessible to the cluster.<XMP>docker push <registry>/<namespace>/:applname.</XMP>
+<LI>Create linkage for any backend services :backendsvc.
+<LI>Deploy the application into the cluster :deployapp.
+<LI>Generate the service for the application :deploysvc.
+</OL>
+
+</BODY>
+</HTML>

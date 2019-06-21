@@ -1,0 +1,87 @@
+{
+    "dashDB For Transactions": [
+        {
+            "label": "dashDB For Transactions",
+            "provider": null,
+            "plan": "Lite",
+            "name": "Db2-v8",
+            "tags": [
+                "big_data",
+                "ibm_created",
+                "db2",
+                "sqldb",
+                "purescale",
+                "sql",
+                "ibm_dedicated_public",
+                "db2 on cloud",
+                "db2oncloud",
+                "dash",
+                "dashdb",
+                "oracle",
+                "database",
+                "transactions",
+                "flex",
+                "dbaas",
+                "lite",
+                "apidocs_enabled"
+            ],
+            "instance_name": "Db2-v8",
+            "binding_name": null,
+            "credentials": {
+                "hostname": "dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+                "password": "7q63j+pxphnshwn2",
+                "https_url": "https://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+                "port": 50000,
+                "ssldsn": "DATABASE=BLUDB;HOSTNAME=dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net;PORT=50001;PROTOCOL=TCPIP;UID=nqq90409;PWD=7q63j+pxphnshwn2;Security=SSL;",
+                "host": "dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+                "jdbcurl": "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB",
+                "uri": "db2://nqq90409:7q63j%2Bpxphnshwn2@dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB",
+                "db": "BLUDB",
+                "dsn": "DATABASE=BLUDB;HOSTNAME=dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net;PORT=50000;PROTOCOL=TCPIP;UID=nqq90409;PWD=7q63j+pxphnshwn2;",
+                "username": "nqq90409",
+                "ssljdbcurl": "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50001/BLUDB:sslConnection=true;"
+            },
+            "syslog_drain_url": null,
+            "volume_mounts": []
+        }
+    ],
+    "user-provided": [
+        {
+            "label": "user-provided",
+            "name": "ups3",
+            "tags": [],
+            "instance_name": "ups3",
+            "binding_name": null,
+            "credentials": {
+                "key3a": "value3a",
+                "key3b": "value3b"
+            },
+            "syslog_drain_url": "",
+            "volume_mounts": []
+        },
+        {
+            "label": "user-provided",
+            "name": "ups2",
+            "tags": [],
+            "instance_name": "ups2",
+            "binding_name": null,
+            "credentials": {
+                "key2": "value2"
+            },
+            "syslog_drain_url": "",
+            "volume_mounts": []
+        },
+        {
+            "label": "user-provided",
+            "name": "ups1",
+            "tags": [],
+            "instance_name": "ups1",
+            "binding_name": null,
+            "credentials": {
+                "key1": "value1"
+            },
+            "syslog_drain_url": "",
+            "volume_mounts": []
+        }
+    ]
+}

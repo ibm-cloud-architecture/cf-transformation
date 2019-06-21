@@ -33,26 +33,29 @@ if [[ ! -f "${source}/server.xml" ]] ; then
   xmlstarlet ed \
     -s /server -t elem -n application \
     -i /server/application -t attr -n name -v "myapp" \
-    -i /server/application -t attr -n context-root -v "\/" \
+    -i /server/application -t attr -n context-root -v "/" \
     -i /server/application -t attr -n location -v "myapp.${apptype}" \
     -i /server/application -t attr -n type -v "${apptype}" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
 else
+  echo "Working with existing server.xml"
   xmlstarlet ed \
-    -d /server/httpEndpoint 
+    -d /server/httpEndpoint \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
 fi
+  echo "Performing server.xml mods"
   # insert webContainer
   xmlstarlet ed \
+    -s /server -t elem -n webContainer \
     -i /server/webContainer -t attr -n trustHostHeaderPort -v true \
     -i /server/webContainer -t attr -n extractHostHeaderPort -v true \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # insert http and https endpoint
   xmlstarlet ed \
     -s /server -t elem -n httpEndpoint \
-    -i /server/httpEndpoint -t attr -n id -v defaultHttpEndpoint \
+    -i /server/httpEndpoint -t attr -n id -v "defaultHttpEndpoint" \
     -i /server/httpEndpoint -t attr -n host -v "*" \
-    -i /server/httpEndpoint -t attr -n httpPort -v "\${port}" \
+    -i /server/httpEndpoint -t attr -n httpPort -v "9080" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # insert runtime-vars
   xmlstarlet ed \
@@ -63,12 +66,14 @@ fi
   xmlstarlet ed \
     -s /server -t elem -n logging \
     -i /server/logging -t attr -n consoleLogLevel -v INFO \
-    -i /server/logging -t attr -n logDirectory -v "\${logdir}" \
+    -i /server/logging -t attr -n logDirectory -v "logs" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
   # disable welcome page
   xmlstarlet ed \
     -s /server -t elem -n httpDispatcher \
     -i /server/httpDispatcher -t attr -n enableWelcomePage -v false \
-    -i /server/httpDispatcher -t attr -n trustedSensitiveHeaderOrigin -v "\*" \
+    -i /server/httpDispatcher -t attr -n trustedSensitiveHeaderOrigin -v "*" \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
+
+  rm t1.xml
 

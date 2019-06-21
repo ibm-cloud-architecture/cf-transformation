@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ${APP_NAME}-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: pod-${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+    spec:
+      containers:
+        - name: ${APP_ARTIFACT_ID}
+          image: "${TARGET_REPO}/${TARGET_WORKSPACE}/${APP_ARTIFACT_ID}:${TAG}"
+          imagePullPolicy: Always
+          volumeMounts:
+          - mountPath: /var/run/secrets/binding-refarch-${SERVICE_NAME}
+            name: binding-refarch-${SERVICE_NAME}
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 60
+      volumes:
+      - name: binding-refarch-${SERVICE_NAME}
+        secret:
+          defaultMode: 420
+          secretName: "binding-${SERVICE_NAME}"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${APP_NAME}-service
+  labels:
+    app: ${APP_NAME}
+spec:
+  type: NodePort
+  selector:
+    app: ${APP_NAME}
+  ports:
+   - protocol: TCP
+     port: 8080
+     nodePort: 30110
