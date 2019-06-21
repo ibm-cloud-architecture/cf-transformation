@@ -10,6 +10,14 @@
 <UL>
 :genfiles.
 </UL>
+
+<H2>Testing your docker image</H2>
+<P>You can test your docker image by running it locally. This local testing may generate errors as there is no backend services available.</P>
+<OL>
+<LI>Generate your docker image<br/><XMP>cd :tgtdir.</XMP><br/><XMP>docker build -t :applname. .</XMP>
+<LI>Run your docker image<br/><XMP>docker run --rm --name testcon :applname. </XMP> <br/>You may have to map application ports to expose them so that you can access your application using <XMP>-p port:port</XMP>
+<LI>When you are done testing, you can remove your running docker using the command:<br/><XMP>docker stop testcon</XMP>
+</OL>
 <H2>Deploying application to :tgttype.</H2>
 <P>Perform the following actions:</P>
 <OL>
