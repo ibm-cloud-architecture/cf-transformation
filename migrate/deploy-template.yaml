@@ -79,7 +79,6 @@ objects:
           targetPort: 9443
       selector:
         app: ${APP_NAME}
-        deploymentconfig: ${APP_DC_NAME}
       sessionAffinity: None
       type: ClusterIP
     status:
@@ -101,14 +100,6 @@ objects:
       tls:
         termination: edge
 parameters:
-  - name: APP_NAME
-    description: Application Name. To be used for the buildconfig, deploymentconfig, and pods.
-  - name: TAG
-    description: TAG for the Image
-  - name: APP_DC_NAME
-    description: Name of the deployment Config
-  - name: APP_ARTIFACT_ID
-    description: Name of the artifact id
   - name: TARGET_REPO
     description: URI to the image repository
   - name: TARGET_WORKSPACE

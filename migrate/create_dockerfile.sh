@@ -22,7 +22,7 @@ echo "# Base Image" > ${dockerfile}
 
 case ${buildpack_name} in
   *liberty*)
-    echo "FROM websphere-liberty:kernel" >> ${dockerfile}
+    echo "FROM ibmcom/websphere-liberty" >> ${dockerfile}
     echo " " >> ${dockerfile}
     echo "# Copy application artifacts & configuration" >> ${dockerfile}
     appfile=$(basename ${target_dir}/apps/*.war)
