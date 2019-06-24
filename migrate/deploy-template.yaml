@@ -64,7 +64,7 @@ objects:
           terminationGracePeriodSeconds: 30
       test: false
       triggers:
-        - type: configChange
+        - type: ConfigChange
   - apiVersion: v1
     kind: Service
     metadata:
