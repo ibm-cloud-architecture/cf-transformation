@@ -54,8 +54,14 @@ else
 fi
 
 if [[ -d "$target_path" ]]; then
-  echo "Target path ${target_path} exists it will be overwritten. Are you sure? (y|N)"
-  exit 990
+  read -r -p "The path ${target_path} exists. It will be overwritten. Are you sure? [y/N] " response
+  case "$response" in
+    [yY][eE][sS]|[yY]) 
+        ;;
+    *)
+        exit 990
+        ;;
+  esac
 elif [[ -f "$target_path" ]]; then
   echo "Target path exists as a file, aborting"
   exit 990
@@ -105,7 +111,7 @@ fi
 
 genfiles=""
 
-if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
+if [[ "$buildpack" == *"liberty"* ]]; then
   $CODEDIR/server_xml.sh ${TARGETDIR}
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
@@ -148,6 +154,10 @@ else
   app_name=$(basename ${TARGETDIR})
 fi
 
+if [[ -z "${app_name}" ]]; then
+  app_name="myapp"
+fi
+
 $CODEDIR/create_dockerfile.sh ${TARGETDIR} ${buildpack}
 
 if [[ $? -gt 0 ]]; then
@@ -157,9 +167,7 @@ fi
 
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
 
-yaml_app_name=$(basename $source_path)
-
-$CODEDIR/create_yaml.sh ${TARGETDIR} ${yaml_app_name}
+$CODEDIR/create_yaml.sh ${TARGETDIR} ${app_name}
 
 if [[ $? -gt 0 ]]; then
   echo "Yaml file creation failed"
