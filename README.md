@@ -55,6 +55,7 @@ To run the tool, perform the following:
 
 To be able to successfully perform the rest of the migration, you will need:
 
+- docker
 - kubectl and CLI access to the kubernetes environment
 - Access to the cloud Foundry environment
 

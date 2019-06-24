@@ -24,10 +24,20 @@ fi
 
 if [ -z "$buildpack" ]; then
   buildpack="ibm-websphere-liberty"
+else
+  if [[ "$buildpack" != "nodejs" ]] & [[ "$buildpack" != "java" ]] & [[ "$buildpack" != *"liberty"* ]]; then
+    echo "Invalid buildpack, only liberty, java or nodejs are supported at this time"
+    exit 998
+  fi
 fi
 
 if [ -z "$target_env" ]; then
   target_env="openshift"
+else 
+  if [[ "$target_env" != "iks" ]] & [[ "$target_env" != "icp" ]] & [[ "$target_env" != "openshift" ]]; then
+    echo "Invalid target environment, only openshift, iks or icp are supported at this time"
+    exit 997
+  fi
 fi
 
 
@@ -43,9 +53,18 @@ else
   CONVDIR=$target_path
 fi
 
+if [[ -d "$target_path" ]]; then
+  echo "Target path ${target_path} exists it will be overwritten. Are you sure? (y|N)"
+  exit 990
+elif [[ -f "$target_path" ]]; then
+  echo "Target path exists as a file, aborting"
+  exit 990
+fi
+ 
+
 CODEDIR=$( dirname "${BASH_SOURCE[0]}" )
 if [ $CODEDIR == "." ]; then
-  CODEDIR=`pwd`
+  CODEDIR=$(pwd)
 fi
 echo "Running command from" $CODEDIR
 
@@ -126,7 +145,7 @@ elif [[ -f "${TARGETDIR}/manifest.yml" ]]; then
 elif [[ "$TARGETFILE" != "" ]]; then
   app_name="${TARGETFILE%.*}"
 else
-  app_name=$(basename ${TARGETPATH})
+  app_name=$(basename ${TARGETDIR})
 fi
 
 $CODEDIR/create_dockerfile.sh ${TARGETDIR} ${buildpack}
@@ -153,7 +172,7 @@ fi
 
 echo $genfiles > ${TARGETDIR}/genfiles.txt
 
-$CODEDIR/writeout.sh ${TARGETDIR} ${yaml_app_name} ${buildpack} ${target_env}
+$CODEDIR/writeout.sh ${TARGETDIR} ${app_name} ${buildpack} ${target_env}
 
 rm ${TARGETDIR}/genfiles.txt
 

@@ -4,15 +4,15 @@
 </HEAD>
 <BODY>
 <H1>CloudFoundry Migration Tool</H1>
-<P>This migration tool is run against the application :applname. of type :appltype..</P>
+<P>This migration tool is run against the application <B>:applname.</B> of type <B>:appltype.</B>.</P>
 <H2>Generated files</H2>
-<P>These are the files that are stored in :tgtdir.. Some of these files may have to be modified manually as listed below:</P>
+<P>These are the files that are stored in <B>:tgtdir.</B>. Some of these files may have to be modified manually as listed below:</P>
 <UL>
 :genfiles.
 </UL>
 
 <H2>Testing your docker image</H2>
-<P>You can test your docker image by running it locally. This local testing may generate errors as there is no backend services available.</P>
+<P>You can test your docker image by running it locally. iThis local testing may generate errors as there is no backend services available.</P>
 <OL>
 <LI>Generate your docker image<br/><XMP>cd :tgtdir.</XMP><br/><XMP>docker build -t :applname. .</XMP>
 <LI>Run your docker image<br/><XMP>docker run --rm --name testcon :applname. </XMP> <br/>You may have to map application ports to expose them so that you can access your application using <XMP>-p port:port</XMP>
