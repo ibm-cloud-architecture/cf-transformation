@@ -22,7 +22,7 @@ echo "# Base Image" > ${dockerfile}
 
 case ${buildpack_name} in
   *liberty*)
-    echo "FROM ibmcom/websphere-liberty" >> ${dockerfile}
+    echo "FROM websphere-liberty:kernel" >> ${dockerfile}
     echo " " >> ${dockerfile}
     echo "# Copy application artifacts & configuration" >> ${dockerfile}
     appfile=$(basename ${target_dir}/apps/*.war)
@@ -32,8 +32,8 @@ case ${buildpack_name} in
     echo "# RUN chown 1001:0 /config/dropins/${appfile}" >> ${dockerfile}
     echo "COPY server.xml /config/server.xml" >> ${dockerfile}
     echo "# RUN chown 1001:0 /config/server.xml" >> ${dockerfile}
-    if [ -f runtime-vars.xml ] ; then
-      echo "COPY runtime-vars.xml /config/runtime-vars.xml" >> ${dockerfile}
+    if [ -f ${target_dir}runtime-vars.xml ] ; then
+      echo "COPY ${target_dir}runtime-vars.xml /config/runtime-vars.xml" >> ${dockerfile}
       echo "# RUN chown 1001:0 /config/runtime-vars.xml" >> ${dockerfile}
     fi
     echo " " >> ${dockerfile}
