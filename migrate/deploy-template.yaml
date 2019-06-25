@@ -49,8 +49,6 @@ objects:
               ports:
                 - containerPort: 9080
                   protocol: TCP
-                - containerPort: 9443
-                  protocol: TCP
               resources: {}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
@@ -80,10 +78,6 @@ objects:
           port: 9080
           protocol: TCP
           targetPort: 9080
-        - name: 9443-tcp
-          port: 9443
-          protocol: TCP
-          targetPort: 9443
       selector:
         app: ${APP_NAME}
       sessionAffinity: None

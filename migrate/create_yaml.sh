@@ -9,9 +9,9 @@ then
   exit 999
 fi
 
-app_name=$2
+buildpack_name=$3
 
-if [ -z "$app_name" ]
+if [ -z "$buildpack_name" ]
 then
   exit 999
 fi
@@ -41,10 +41,27 @@ fi
 
 # OpenShift
 
-sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_DC_NAME}/dc-${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-template.yaml > ${deploy_oc}
+sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-template.yaml > ${deploy_oc}
 
 # Kubernetes
 
 sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-kube.yaml > ${deploy_kube}
+
+# Deal with Ports for different Buildpacks
+
+case ${buildpack_name} in
+  *liberty*)
+  # Nothing to change
+  ;;
+  *java*)
+  sed -e "s/9080/8080/g" ${deploy_oc}
+  sed -e "s/9080/8080/g" ${deploy_kube}
+  ;;
+  *node*)
+  sed -e "s/9080/8000/g" ${deploy_oc}
+  sed -e "s/9080/8000/g" ${deploy_kube}
+  ;;
+  *) echo "Unsupported Buildpack: "${buildpack_name}; exit 1;;
+esac;
 
 exit 0

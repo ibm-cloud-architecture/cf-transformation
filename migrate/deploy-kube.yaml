@@ -19,7 +19,7 @@ spec:
             name: binding-refarch-${SERVICE_NAME}
           livenessProbe:
             tcpSocket:
-              port: 8080
+              port: 9080
             initialDelaySeconds: 20
             periodSeconds: 60
       volumes:
@@ -41,5 +41,5 @@ spec:
     app: ${APP_NAME}
   ports:
    - protocol: TCP
-     port: 8080
+     port: 9080
      nodePort: 30110
