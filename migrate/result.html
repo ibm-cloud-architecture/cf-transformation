@@ -23,10 +23,9 @@
 <OL>
 <LI>You can setup environtment variables to make it easy to run the commands listed here:
 <UL>
-<LI>export REPOHOST=
-<LI>export REPOSPACE=
-<LI>export APPLPORT=
-<LI>export KUBESERVER=
+<LI>The docker image repository host (and port) that you will use such as docker.io for DockerHub, or icpmaster.com:8500, or <region>.icr.io or other repository hosts.  <XMP>export REPOHOST=docker.io</XMP>
+<LI>The namespace that you will store this image to. <XMP>export REPOSPACE=mynamespace</XMP>
+:envvar.
 </UL>
 <LI>Go to the conversion path directory <XMP>cd :tgtdir.</XMP>
 <LI>Generate the docker image:<XMP>docker build -t :applname. .</XMP>

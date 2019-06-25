@@ -20,12 +20,20 @@ for line in $(cat $CODEDIR/result.html)
 do
   if [[ "$line" == ":genfiles." ]]; then
     echo $files
+  if [[ "$line" == ":envvar." ]]; then
+    if [[ "$TGTTYPE" == "openshift" ]]; then
+      echo "<LI>The OpenShift server target. <XMP>export SERVER=<oc-url></XMP>"
+    elif [[ "$TGTTYPE" == "iks" ]]; then
+      echo "<LI>The IBM Kubernetes server cluster name. <XMP>export CLUSTER=mycluster</XMP>"
+    elif [[ "$TGTTYPE" == "icp" ]]; then
+      echo "<LI>The IBM Cloud Private master host name. <XMP>export SERVER=icpmaster.company.com</XMP>"
+    fi
   elif [[ "$line" == ":deployapp." ]]; then
     if [[ "$TGTTYPE" == "openshift" ]]; then
       echo "<LI>Login to OpenShift"
       echo "<XMP>oc login ${KUBESERVER}</XMP>"
       echo "<LI>Create application from the deploy template"
-      echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_HOST=${REPOHOST} -pTARGET_WORKSPACE=${REPOSPACE}</XMP>"
+      echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_HOST=\${REPOHOST} -pTARGET_WORKSPACE=\${REPOSPACE}</XMP>"
     else
       if [[ "$TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"
@@ -36,7 +44,7 @@ do
         echo "<LI>Login to IBM Cloud Private"
         echo "<XMP>cloudctl login</XMP>"
       else 
-        echo "Unsupported environment ${TGTTYPE}"
+        echo "<LI>Login to your Kubernetes environment.<XMP>kubectl config set-credentials . . .</XMP>"
       fi
       echo "<LI>Create objects for kubernetes"
       echo "<XMP>kubectl apply -f deploy-kube/deploy-kube.yaml</XMP>"
