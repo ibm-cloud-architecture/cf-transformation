@@ -31,18 +31,18 @@ do
   elif [[ "$line" == ":deployapp." ]]; then
     if [[ "$TGTTYPE" == "openshift" ]]; then
       echo "<LI>Login to OpenShift"
-      echo "<XMP>oc login ${KUBESERVER}</XMP>"
+      echo "<XMP>oc login \${SERVER}</XMP>"
       echo "<LI>Create application from the deploy template"
       echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_HOST=\${REPOHOST} -pTARGET_WORKSPACE=\${REPOSPACE}</XMP>"
     else
       if [[ "$TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"
         echo "<XMP>ibmcloud login </XMP>"
-        echo "<XMP>ibmcloud ks cluster-config ${IKSCLUSTER}</XMP>"
+        echo "<XMP>ibmcloud ks cluster-config \${CLUSTER}</XMP>"
         echo "<XMP>export KUBECONFIG=<configfile></XMP>"
       elif [[ "$TGTTYPE" == "icp" ]]; then
         echo "<LI>Login to IBM Cloud Private"
-        echo "<XMP>cloudctl login</XMP>"
+        echo "<XMP>cloudctl login -a https://\${SERVER}</XMP>"
       else 
         echo "<LI>Login to your Kubernetes environment.<XMP>kubectl config set-credentials . . .</XMP>"
       fi
