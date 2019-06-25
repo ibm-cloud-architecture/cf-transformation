@@ -64,8 +64,36 @@ Perform the following steps:
 
 	Note that for login to OpenShift cluster using `oc login` command, you may be asked to get a login token from the server.
 
-11. Once the migration is completed, check the route that is created and open a browser window to `https://<routehost>/JavaHelloWorldApp`
+11. Once the migration is completed, check the route that is created and open a browser window to `https://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you have for CloudFoundry in step 5.<br>![Sample app OC](images/002-sampleapp.png)
+
+## Working with sample Liberty app from GIT
+
+1. Go back to the `migrate` directory and run the following command:
+
+		cd /cf-transformation/migrate
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e openshift -b ibm-websphere-liberty
+
+2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/JavaHelloWorldApp`.
+
+## Working with Springboot application with a JAR file
 
 
+1. Go back to the `migrate` directory and run the following command:
+
+		cd /cf-transformation/migrate
+		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-web -t /data/cfjava -e openshift -b java
+
+2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/customer`.
+
+
+## Working with nodejs application
+
+
+1. Go back to the `migrate` directory and run the following command:
+
+		cd /cf-transformation/migrate
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/node-helloworld -t /data/cfnodejs -e openshift -b nodejs
+
+2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/`.
 
 
