@@ -21,10 +21,17 @@
 <H2>Deploying application to :tgttype.</H2>
 <P>Perform the following actions:</P>
 <OL>
+<LI>You can setup environtment variables to make it easy to run the commands listed here:
+<UL>
+<LI>export REPOHOST=
+<LI>export REPOSPACE=
+<LI>export APPLPORT=
+<LI>export KUBESERVER=
+</UL>
 <LI>Go to the conversion path directory <XMP>cd :tgtdir.</XMP>
 <LI>Generate the docker image:<XMP>docker build -t :applname. .</XMP>
-<LI>Tag the docker image for a docker repository that is accessible to the cluster.<XMP>docker tag :applname. <registry>/<namespace>/:applname.</XMP>
-<LI>Store the docker image into a docker repository that is accessible to the cluster.<XMP>docker login <registry></XMP> <XMP>docker push <registry>/<namespace>/:applname.</XMP>
+<LI>Tag the docker image for a docker repository that is accessible to the cluster.<XMP>docker tag :applname. ${REPOHOST}/${REPOSPACE}/:applname.</XMP>
+<LI>Store the docker image into a docker repository that is accessible to the cluster.<XMP>docker login ${REPOHOST}</XMP> <XMP>docker push ${REPOHOST}/${REPOSPACE}/:applname.</XMP>
 :deployapp.
 </OL>
 

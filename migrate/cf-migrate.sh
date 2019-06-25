@@ -25,7 +25,7 @@ fi
 if [ -z "$buildpack" ]; then
   buildpack="ibm-websphere-liberty"
 else
-  if [[ "$buildpack" != "nodejs" ]] & [[ "$buildpack" != "java" ]] & [[ "$buildpack" != *"liberty"* ]]; then
+  if [[ "$buildpack" != "nodejs" ]] && [[ "$buildpack" != "java" ]] && [[ "$buildpack" != *"liberty"* ]]; then
     echo "Invalid buildpack, only liberty, java or nodejs are supported at this time"
     exit 998
   fi
@@ -34,7 +34,7 @@ fi
 if [ -z "$target_env" ]; then
   target_env="openshift"
 else 
-  if [[ "$target_env" != "iks" ]] & [[ "$target_env" != "icp" ]] & [[ "$target_env" != "openshift" ]]; then
+  if [[ "$target_env" != "iks" ]] && [[ "$target_env" != "icp" ]] && [[ "$target_env" != "openshift" ]]; then
     echo "Invalid target environment, only openshift, iks or icp are supported at this time"
     exit 997
   fi
@@ -148,15 +148,19 @@ if [[ -f "${source_path}/manifest.yml" ]]; then
   app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
 elif [[ -f "${TARGETDIR}/manifest.yml" ]]; then 
   app_name=$(cat ${TARGETDIR}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
-elif [[ "$TARGETFILE" != "" ]]; then
-  app_name="${TARGETFILE%.*}"
 else
-  app_name=$(basename ${TARGETDIR})
+  app_name=""
 fi
 
 if [[ -z "${app_name}" ]]; then
-  app_name="myapp"
+  if [[ "$TARGETFILE" != "" ]]; then
+    app_name="${TARGETFILE%.*}"
+  else
+    app_name=$(basename ${TARGETDIR})
+  fi
 fi
+
+echo "Processing application ${app_name}."
 
 $CODEDIR/create_dockerfile.sh ${TARGETDIR} ${buildpack}
 
