@@ -51,7 +51,7 @@ sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -
 
 case ${buildpack_name} in
   *liberty*)
-  # Nothing to change
+  sed "/terminationMessagePolicy*/r deploy-libertycode.yaml" ${deploy_oc}
   ;;
   *java*)
   sed -e "s/9080/8080/g" ${deploy_oc}
@@ -59,6 +59,7 @@ case ${buildpack_name} in
   ;;
   *node*)
   sed -e "s/9080/8000/g" ${deploy_oc}
+  sed "/terminationMessagePolicy*/r deploy-nodecode.yaml" ${deploy_oc}
   sed -e "s/9080/8000/g" ${deploy_kube}
   ;;
   *) echo "Unsupported Buildpack: "${buildpack_name}; exit 1;;
