@@ -63,7 +63,9 @@ Perform the following steps:
 
 		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e openshift -b ibm-websphere-liberty
 
-	The output should be similar to the following, open the resulting file using a Web browser (remember the path mapping that you did in step 1).
+	The output should be similar to the following:<br>![Command output](images/006-convert.png)
+
+10. Open the resulting file using a Web browser (remember the path mapping that you did in step 1). <br>![Instruction](images/007-result.png)
 
 10. Go directly to the section of migration and perform the step-by-step instruction there. Note that you must specify the following values:
 
