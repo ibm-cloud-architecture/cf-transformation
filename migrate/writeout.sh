@@ -20,7 +20,7 @@ for line in $(cat $CODEDIR/result.html)
 do
   if [[ "$line" == ":genfiles." ]]; then
     echo $files
-  if [[ "$line" == ":envvar." ]]; then
+  elif [[ "$line" == ":envvar." ]]; then
     if [[ "$TGTTYPE" == "openshift" ]]; then
       echo "<LI>The OpenShift server target. <XMP>export SERVER=<oc-url></XMP>"
     elif [[ "$TGTTYPE" == "iks" ]]; then

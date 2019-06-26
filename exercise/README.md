@@ -43,6 +43,7 @@ Perform the following steps:
 			ibmcloud cf cups ups3 -p '{ "key3": "value3" }'
 			ibmcloud app push abc-hello-world -n abc-hello-world
 
+	![App push](images/003-cups.png)
 	![App push](images/003-cfpush.png)
 
 5. Test the application on whether it is running, go to the URL `https://abc-hello-world.mybluemix.net` and you should get the following screen: <br> ![Sample app](images/004-sampleapp.png)
