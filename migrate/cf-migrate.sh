@@ -160,6 +160,7 @@ if [[ -z "${app_name}" ]]; then
   fi
 fi
 
+app_name=$(echo $app_name | tr [:upper:] [:lower:] | tr -s "*.<>_\!&#@%" "-")
 echo "Processing application ${app_name}."
 
 $CODEDIR/create_dockerfile.sh ${TARGETDIR} ${buildpack}
