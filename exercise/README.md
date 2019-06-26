@@ -24,6 +24,7 @@ Perform the following steps:
 3. Go to the example code directory:
 
 		cd cf-transformation/exemplar/hello-world
+	![Download code](images/001-docker.png)
 
 4. Login and deploy the cloud foundry application to IBM Cloud environment:
  
@@ -31,11 +32,18 @@ Perform the following steps:
 	- you may substitute your name for the User Provided Service values
 	- change the `abc` for the `push` command with your initials, the complete string must be unique.
 
-		ibmcloud login 
-		ibmcloud target --cf
-                ibmcloud cf cups ups1 -p '{ "key1": "First " }'
-                ibmcloud cf cups ups2 -p '{ "key2": "Lastname" }'
-		ibmcloud app push -n abc-hello-world
+			ibmcloud login 
+			ibmcloud target --cf
+
+	![Login](002-cflogin.png)
+
+			mvn clean install
+        	        ibmcloud cf cups ups1 -p '{ "key1": "First " }'
+		      	ibmcloud cf cups ups2 -p '{ "key2": "Lastname" }'
+			ibmcloud cf cups ups3 -p '{ "key3": "value3" }'
+			ibmcloud app push abc-hello-world -n abc-hello-world
+
+	![App push](003-cfpush.png)
 
 5. Test the application on whether it is running, go to the URL `https://abc-hello-world.mybluemix.net` and you should get the following screen: <br> ![Sample app](images/001-sampleapp.png)
 
