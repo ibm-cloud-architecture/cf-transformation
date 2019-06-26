@@ -97,7 +97,7 @@ Perform the following steps:
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-web -t /data/cfjava -e openshift -b java
+		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e openshift -b java
 
 2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/customer`.
 
