@@ -89,7 +89,7 @@ Perform the following steps:
 		cd /cf-transformation/migrate
 		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e openshift -b ibm-websphere-liberty
 
-2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/JavaHelloWorldApp`.
+2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/JavaHelloWorldApp`.<br>![HelloWorld](images/liberty2.png)
 
 ## Working with Springboot application with a JAR file
 
@@ -99,7 +99,7 @@ Perform the following steps:
 		cd /cf-transformation/migrate
 		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e openshift -b java
 
-2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/customer`.
+2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/customer`. <br>![Customer app](images/customer.png)
 
 
 ## Working with nodejs application
@@ -110,6 +110,6 @@ Perform the following steps:
 		cd /cf-transformation/migrate
 		./cf-migrate.sh -s https://github.com/IBM-Cloud/node-helloworld -t /data/cfnodejs -e openshift -b nodejs
 
-2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/`.
+2. Open the `result.html` that was presented in a Web browser and follow the instruction similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/`.<br>![Node](images/nodehello.png)
 
 
