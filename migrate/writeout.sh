@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TGTPATH=$1 
+TGTPATH=$1
 TGTTYPE=$4
 APPLNAME=$2
 APPLTYPE=$3
@@ -11,16 +11,16 @@ if [ $CODEDIR == "." ]; then
   CODEDIR=`pwd`
 fi
 
-# Read result.html and write out result.html 
+# Read result.html and write out result.html
 IFS=$'\n'       # make newlines the only separator
 
 files=$(cat $TGTPATH/genfiles.txt)
 
-for line in $(cat $CODEDIR/result.html)    
+for line in $(cat $CODEDIR/result.html)
 do
   if [[ "$line" == ":genfiles." ]]; then
     echo $files
-  elif [[ "$line" == ":envvar." ]]; then
+  if [[ "$line" == ":envvar." ]]; then
     if [[ "$TGTTYPE" == "openshift" ]]; then
       echo "<LI>The OpenShift server target. <XMP>export SERVER=<oc-url></XMP>"
     elif [[ "$TGTTYPE" == "iks" ]]; then
@@ -43,7 +43,7 @@ do
       elif [[ "$TGTTYPE" == "icp" ]]; then
         echo "<LI>Login to IBM Cloud Private"
         echo "<XMP>cloudctl login -a https://\${SERVER}</XMP>"
-      else 
+      else
         echo "<LI>Login to your Kubernetes environment.<XMP>kubectl config set-credentials . . .</XMP>"
       fi
       echo "<LI>Create objects for kubernetes"
@@ -53,4 +53,5 @@ do
     line=$(echo $line | sed -e "s/\:applname./$APPLNAME/g" | sed -e "s/\:appltype./$APPLTYPE/g" | sed -e "s,\:tgtdir.,$TGTPATH,g" | sed -e "s/\:tgttype./$TGTTYPE/g")
     echo "$line"
   fi
+fi
 done > $TGTPATH/result.html

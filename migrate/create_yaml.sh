@@ -9,6 +9,13 @@ then
   exit 999
 fi
 
+app_name=$2
+
+if [ -z "$app_name" ]
+then
+  exit 999
+fi
+
 buildpack_name=$3
 
 if [ -z "$buildpack_name" ]
@@ -51,16 +58,16 @@ sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -
 
 case ${buildpack_name} in
   *liberty*)
-  sed "/terminationMessagePolicy*/r deploy-libertycode.yaml" ${deploy_oc}
+  sed -i '' "/terminationMessagePolicy*/r deploy-libertycode.yaml" ${deploy_oc}
   ;;
   *java*)
-  sed -e "s/9080/8080/g" ${deploy_oc}
-  sed -e "s/9080/8080/g" ${deploy_kube}
+  sed -i '' "s/9080/8080/g" ${deploy_oc}
+  sed -i '' "s/9080/8080/g" ${deploy_kube}
   ;;
   *node*)
-  sed -e "s/9080/8000/g" ${deploy_oc}
-  sed "/terminationMessagePolicy*/r deploy-nodecode.yaml" ${deploy_oc}
-  sed -e "s/9080/8000/g" ${deploy_kube}
+  sed -i '' "s/9080/8000/g" ${deploy_oc}
+  sed -i '' "/terminationMessagePolicy*/r deploy-nodecode.yaml" ${deploy_oc}
+  sed -i '' "s/9080/8000/g" ${deploy_kube}
   ;;
   *) echo "Unsupported Buildpack: "${buildpack_name}; exit 1;;
 esac;
