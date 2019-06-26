@@ -33,7 +33,7 @@ do
       echo "<LI>Login to OpenShift"
       echo "<XMP>oc login \${SERVER}</XMP>"
       echo "<LI>Create application from the deploy template"
-      echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_HOST=\${REPOHOST} -pTARGET_WORKSPACE=\${REPOSPACE}</XMP>"
+      echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_REPO=\${REPOHOST} -pTARGET_WORKSPACE=\${REPOSPACE}</XMP>"
     else
       if [[ "$TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"

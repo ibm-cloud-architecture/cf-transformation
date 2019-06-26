@@ -39,7 +39,7 @@ To run the tool, perform the following:
 
 3. Get the content of your application VCAP_SERVICES from Cloud Foundry:
 
-		cf env <appname> | awk '/VCAP_SERVICES/{flag=1;next} /VCAP_APPLICATION/{flag=0} flag' | sed  -e '$d' | sed -e '$d' | sed -e ‘$d’ > vcap.json
+		cf env <appname> | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 
 3. Run the migration tool against your source:
 

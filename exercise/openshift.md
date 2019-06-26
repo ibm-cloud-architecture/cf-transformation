@@ -38,7 +38,7 @@ Perform the following steps:
 	![Login](images/002-cflogin.png)
 
 			mvn clean install
-        	        ibmcloud cf cups ups1 -p '{ "key1": "First " }'
+		        ibmcloud cf cups ups1 -p '{ "key1": "First " }'
 		      	ibmcloud cf cups ups2 -p '{ "key2": "Lastname" }'
 			ibmcloud cf cups ups3 -p '{ "key3": "value3" }'
 			ibmcloud app push abc-hello-world -n abc-hello-world
@@ -46,7 +46,7 @@ Perform the following steps:
 	![App push](images/003-cups.png)
 	![App push](images/003-cfpush.png)
 
-5. Test the application on whether it is running, go to the URL `https://abc-hello-world.mybluemix.net` and you should get the following screen: <br> ![Sample app](images/004-sampleapp.png)
+5. Test the application on whether it is running, go to the URL `http://abc-hello-world.mybluemix.net` and you should get the following screen: <br> ![Sample app](images/004-sampleapp.png)
 
 6. Now that the application is running, you should be able to get the values of the custom ups in the application page.
 
@@ -56,7 +56,7 @@ Perform the following steps:
 
 7. Retrieve the application's VCAP_SERVICES variable
 
-		cf env abc-hello-world | awk '/VCAP_SERVICES/{flag=1;next} /VCAP_APPLICATION/{flag=0} flag' | sed  -e '$d' | sed -e '$d' | sed -e ‘$d’ > vcap.json
+		ibmcloud cf env abc-hello-world | iawk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 		cat vcap.json
 
 9. Run the migration command:
@@ -75,7 +75,12 @@ Perform the following steps:
 
 	Note that for login to OpenShift cluster using `oc login` command, you may be asked to get a login token from the server.
 
-11. Once the migration is completed, check the route that is created and open a browser window to `https://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you have for CloudFoundry in step 5.<br>![Sample app OC](images/002-sampleapp.png)
+	![Output1](images/007-1-output.png)
+	![Output2](images/007-2-output.png)
+	![Output3](images/007-3-output.png)
+
+
+11. Once the migration is completed, check the route that is created and open a browser window to `https://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you have for CloudFoundry in step 5.<br>![Sample app OC](images/008-sampleapp.png)
 
 ## Working with sample Liberty app from GIT
 
