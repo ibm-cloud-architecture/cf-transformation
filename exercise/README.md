@@ -35,7 +35,7 @@ Perform the following steps:
 			ibmcloud login 
 			ibmcloud target --cf
 
-	![Login](002-cflogin.png)
+	![Login](images/002-cflogin.png)
 
 			mvn clean install
         	        ibmcloud cf cups ups1 -p '{ "key1": "First " }'
@@ -43,9 +43,9 @@ Perform the following steps:
 			ibmcloud cf cups ups3 -p '{ "key3": "value3" }'
 			ibmcloud app push abc-hello-world -n abc-hello-world
 
-	![App push](003-cfpush.png)
+	![App push](images/003-cfpush.png)
 
-5. Test the application on whether it is running, go to the URL `https://abc-hello-world.mybluemix.net` and you should get the following screen: <br> ![Sample app](images/001-sampleapp.png)
+5. Test the application on whether it is running, go to the URL `https://abc-hello-world.mybluemix.net` and you should get the following screen: <br> ![Sample app](images/004-sampleapp.png)
 
 6. Now that the application is running, you should be able to get the values of the custom ups in the application page.
 
