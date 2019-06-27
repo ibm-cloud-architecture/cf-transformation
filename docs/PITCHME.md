@@ -182,3 +182,9 @@ Current limitation for the tool:
 ---
 ## Sample output
 ![IMAGE](docs/images/toolrun.PNG)
+---
+## Deploy output (1 of 2)
+![IMAGE](docs/images/output1.PNG)
+---
+## Deploy output (2 of 2)
+![IMAGE](docs/images/output2.PNG)
