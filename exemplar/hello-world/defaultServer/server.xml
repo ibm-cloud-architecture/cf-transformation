@@ -16,6 +16,4 @@
     <jndiEntry jndiName="key1" value="${cloud.services.ups1.connection.key1}" />
     <jndiEntry jndiName="key2" value="${cloud.services.ups2.connection.key2}" />
 
-    <application name="JavaHelloWorldApp" context-root="/" location="JavaHelloWorldApp.war" type="war"/>
-
 </server>
