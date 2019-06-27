@@ -42,4 +42,4 @@ spec:
   ports:
    - protocol: TCP
      port: 9080
-     nodePort: 30110
+     nodePort: 30310

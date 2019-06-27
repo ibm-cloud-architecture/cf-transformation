@@ -25,11 +25,14 @@ case ${buildpack_name} in
     echo "FROM websphere-liberty:kernel" >> ${dockerfile}
     echo " " >> ${dockerfile}
     echo "# Copy application artifacts & configuration" >> ${dockerfile}
-    appfile=$(basename ${target_dir}/apps/*.war)
     echo "RUN mkdir -p /config" >> ${dockerfile}
     echo "RUN mkdir -p /config/dropins" >> ${dockerfile}
-    echo "COPY apps/${appfile} /config/dropins/${appfile}" >> ${dockerfile}
-    echo "# RUN chown 1001:0 /config/dropins/${appfile}" >> ${dockerfile}
+    cd ${target_dir}
+    for appfile in $(find \. -name *.?ar); do
+      dockerappfile=$(basename ${appfile})
+      echo "COPY ${appfile} /config/dropins/${dockerappfile}" >> ${dockerfile}
+      echo "# RUN chown 1001:0 /config/dropins/${dockerappfile}" >> ${dockerfile}
+    done
     echo "COPY server.xml /config/server.xml" >> ${dockerfile}
     echo "# RUN chown 1001:0 /config/server.xml" >> ${dockerfile}
     if [ -f "${target_dir}/runtime-vars.xml" ] ; then
@@ -43,21 +46,23 @@ case ${buildpack_name} in
     ;;
 
   *java*)
-    if [ -f ${target_dir}/apps/*.war ] ; then
+    cd ${target_dir}
+    for appfile in $(find \. -name *.?ar); do
+      dockerappfile=$(basename ${appfile})
+      if [[ ${dockerappfile} == *.war ]]; then
         echo "FROM tomcat" >> ${dockerfile}
         echo " " >> ${dockerfile}
         echo "# Copy application artifacts & configuration" >> ${dockerfile}
-        appfile=$(basename ${target_dir}/apps/*.war)
         echo "RUN mkdir -p /usr/local/tomcat/webapps" >> ${dockerfile}
-        echo "COPY apps/${appfile} /usr/local/tomcat/webapps/${appfile}" >> ${dockerfile}
-    else
+        echo "COPY ${appfile} /usr/local/tomcat/webapps/${dockerappfile}" >> ${dockerfile}
+      else
         echo "FROM java" >> ${dockerfile}
         echo " " >> ${dockerfile}
         echo "# Copy application artifacts & configuration" >> ${dockerfile}
-        appfile=$(basename ${target_dir}/*.jar)
-        echo "COPY ${appfile} /" >> ${dockerfile}
-        echo "CMD java -cp /${appfile} org.springframework.boot.loader.JarLauncher" >> ${dockerfile}
-    fi
+        echo "COPY ${appfile} /${dockerappfile}" >> ${dockerfile}
+        echo "CMD java -cp /${dockerappfile} org.springframework.boot.loader.JarLauncher" >> ${dockerfile}
+      fi
+    done
     echo " " >> ${dockerfile}
     ;;
 
