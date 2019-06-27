@@ -10,7 +10,6 @@
 	- Manifest file 
 
 ---
-
 @snap[west span-60 text-64]
 ## Kubernetes and OpenShift for CloudFoundry users
 @snapend
@@ -76,9 +75,33 @@ All the following are performed by `cf push`
 @snapend
 
 @snap[east span-50 text-06]
+### OpenShift
+@ul[](false)
+- Using a **BuildConfig** generates an **ImageStream** in OpenShift; the image can be build using Dockerfile or S2I process<br>`oc start-build <buildconfig_name>`
+- Create ConfigMap and Secrets to access backend services
+- Use a Template object that contains at least a **DeploymentConfig** (with **Pod** definition), **Service** and **Route**:<br>`oc new-app -f <template.yaml>`
+@ulend
+@snapend
+---
+@snap[north-east span-99 text-09]
+## Application Staging 
+@snapend
+@snap[west span-50 text-06]
+### CloudFoundry
+All the following are performed by `cf push`
+@ul[](false)
+- The CLI uploads application artifacts to CloudFoundry
+- CloudFoundry selects the appropriate BuildPack
+- BuildPack prepares the artifacts to create a runnable unit (**Droplet**)
+- CloudFoundry stores the Droplet in the **Blob store**
+- CloudFoundry deploys the Droplet into its Runtime as a **Garden Container** and provides VCAP_SERVICES to access backend services
+- CloudFoundry associates the appropriate **Router entry**
+@ulend
+@snapend
+
+@snap[east span-50 text-06]
 ### Kubernetes
 @ul[](false)
-- Build and assemble the necessary deployment artifacts
 - Create a **docker image** using a Dockerfile and store the image in a **Docker repository**<br/>`docker build …`<br/>`docker push …`
 - Create ConfigMap and Secrets to access backend services
 - Use deployment YAML to deploy docker image into a **Kubernetes Pod** in a Deployment or DeploymentConfig<br/>`kubectl apply -f …`
@@ -86,6 +109,10 @@ All the following are performed by `cf push`
 @ulend
 @snapend
 
+---
+@snap[west span-60 text-64]
+## CF migration tool
+@snapend
 ---
 
 ## Migration approach
