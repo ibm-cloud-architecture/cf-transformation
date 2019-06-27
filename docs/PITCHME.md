@@ -18,23 +18,36 @@
 ## CloudFoundry application architecture
 ![IMAGE](docs/images/cf.PNG)
 ---
-
 @snap[north span-99 text-09]
 ## Kubernetes application architecture 
 @snapend
 
-@snap[west span-37 text-06]
+@snap[west span-45 text-06]
 
 @ul[](false)
-In Kubernetes applications are running in Pods, which is similar to CloudFoundry containers
-
-The Service perform load balancing for all the pod instances and then external requests can be retrieved using a LoadBalancer service or an Ingress entry. The Go Router in CloudFoundry performs these capabilities
-
-The Backend Services that the application uses are typically accessed using information from ConfigMaps or credentials from Secrets; in CloudFoundry VCAP_SERVICES environment variable is created for the application instance for accessing these Backend Services
+- In Kubernetes applications are running in Pods, which is similar to CloudFoundry containers
+- The Service perform load balancing for all the pod instances and then external requests can be retrieved using a LoadBalancer service or an Ingress entry. The Go Router in CloudFoundry performs these capabilities
+- The Backend Services that the application uses are typically accessed using information from ConfigMaps or credentials from Secrets; in CloudFoundry VCAP_SERVICES environment variable is created for the application instance for accessing these Backend Services
 @ulend
 @snapend
-@snap[east span-60 text-06]
+@snap[east span-55 text-06]
 ![IMAGE](docs/images/kube.PNG)
+@snapend
+---
+@snap[north span-99 text-09]
+## OpenShift application architecture 
+@snapend
+
+@snap[west span-45 text-06]
+
+@ul[](false)
+- OpenShift is based on Kubernetes technology, hence a lot of the concepts of Kubernetes applies to OpenShift
+- OpenShift uses Routes in place of Ingress entry, this is much more similar to CloudFoundry GO router with dynamically allocated hostnames that is addressable externally
+- OpenShift uses DeploymentConfig, which has more capabilities then a Kubernetes Deployment for application automatic (re)-deployment when the Image or Configuration does change
+@ulend
+@snapend
+@snap[east span-55 text-06]
+![IMAGE](docs/images/oc.PNG)
 @snapend
 ---
 @snap[north span-99 text-09]
