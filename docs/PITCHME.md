@@ -11,7 +11,7 @@
 
 ---
 
-@snap[north span-99 text-44]
+@snap[west span-60 text-64]
 ## Kubernetes and OpenShift for CloudFoundry users
 @snapend
 ---
@@ -19,8 +19,21 @@
 ![IMAGE](docs/images/cf.PNG)
 ---
 
-## Kubernetes application architecture
+@snap[north span-99 text-09]
+## Kubernetes application architecture 
+@snapend
+
+@snap[east span-37 text-06]
+In Kubernetes applications are running in Pods, which is similar to CloudFoundry containers
+
+The Service perform load balancing for all the pod instances and then external requests can be retrieved using a LoadBalancer service or an Ingress entry. The Go Router in CloudFoundry performs these capabilities
+
+The Backend Services that the application uses are typically accessed using information from ConfigMaps or credentials from Secrets; in CloudFoundry VCAP_SERVICES environment variable is created for the application instance for accessing these Backend Services
+
+@snapend
+@snap[west span-60 text-06]
 ![IMAGE](docs/images/kube.PNG)
+@snapend
 ---
 @snap[north span-99 text-09]
 ## Application Staging 
