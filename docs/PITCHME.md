@@ -18,7 +18,7 @@
 ## CloudFoundry application architecture
 ![IMAGE](docs/images/cf.PNG)
 ---
-@snap[north span-99 text-09]
+@snap[north-east span-99 text-09]
 ## Kubernetes application architecture 
 @snapend
 
@@ -34,7 +34,7 @@
 ![IMAGE](docs/images/kube.PNG)
 @snapend
 ---
-@snap[north span-99 text-09]
+@snap[north-east span-99 text-09]
 ## OpenShift application architecture 
 @snapend
 
@@ -50,7 +50,16 @@
 ![IMAGE](docs/images/oc.PNG)
 @snapend
 ---
-@snap[north span-99 text-09]
+## Application Staging
+
+- Collect build artifact, including perform maven, gradle or other build mechanism
+- Application is then staged into the Cloud platform; this staging process is typically split into:
+	- Container image creation
+	- Application deployment
+
+![Application Staging](docs/images/staging.PNG)
+---
+@snap[north-east span-99 text-09]
 ## Application Staging 
 @snapend
 @snap[west span-50 text-06]
