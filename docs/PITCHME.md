@@ -154,6 +154,15 @@ The cf-migrate flow (Runtime/Buildpack specific):
 	- Use a path from the host that you will use to store the output, assuming that you use /Users/ibmuser/data:<br/>
 `docker run --net=host -v /Users/ibmuser/data:/data -it ibmcloudacademy/cfmigrationtool bash`
 ---
+## Limitation
+
+Current limitation for the tool:
+
+- Only support gradle or maven as the build mechanism
+- Limited logic to manage complex application (ie multiple war files or non npm based nodejs)
+- Liberty apps must already have the DataSource and JDBC definition in server.xml file (will not build a JDBC structure in server.xml)
+- Must manually supply a VCAP_SERVICES content
+---
 
 ## Running migration tool
 
@@ -170,20 +179,6 @@ The cf-migrate flow (Runtime/Buildpack specific):
 	- `-t`: the processing and result path, useful for defining container shared path
 	- `-b`: application or buildpack type (ibm-websphere-liberty, java, nodejs)
 	- `-e`: target type (openshift, iks, icp)	
-
 ---
-
 ## Sample output
-
-
 ![IMAGE](docs/images/toolrun.PNG)
-![IMAGE](docs/images/result.PNG)
-
-## Limitation
-
-Current limitation for the tool:
-
-- Only support gradle or maven as the build mechanism
-- Limited logic to manage complex application (ie multiple war files or non npm based nodejs)
-- Liberty apps must already have the DataSource and JDBC definition in server.xml file (will not build a JDBC structure in server.xml)
-- Must manually supply a VCAP_SERVICES content
