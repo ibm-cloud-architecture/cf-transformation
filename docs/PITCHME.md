@@ -10,6 +10,11 @@
 	- Manifest file 
 
 ---
+
+@snap[north span-99 text-44]
+## Kubernetes and OpenShift for CloudFoundry users
+@snapend
+---
 ## CloudFoundry application architecture
 ![IMAGE](docs/images/cf.PNG)
 ---
