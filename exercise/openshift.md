@@ -57,7 +57,7 @@ Perform the following steps:
 
 7. Retrieve the application's VCAP_SERVICES variables and put them in the `vcap.json` file.
 
-		ibmcloud cf env abc-hello-world | iawk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
+		ibmcloud cf env abc-hello-world | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 		cat vcap.json
 
 9. Run the migration command:
