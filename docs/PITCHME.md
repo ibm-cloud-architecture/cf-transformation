@@ -24,9 +24,12 @@
 @snap[west span-45 text-06]
 
 @ul[](false)
-- In Kubernetes applications are running in Pods, which is similar to CloudFoundry containers
-- The Service perform load balancing for all the pod instances and then external requests can be retrieved using a LoadBalancer service or an Ingress entry. The Go Router in CloudFoundry performs these capabilities
-- The Backend Services that the application uses are typically accessed using information from ConfigMaps or credentials from Secrets; in CloudFoundry VCAP_SERVICES environment variable is created for the application instance for accessing these Backend Services
+- Applications run in Pods, which are similar to Cloud Foundry droplet containers
+- A Kubernetes Service performs load balancing for all the pod instances
+	- External requests can be directed using a LoadBalancer service or an Ingress entry
+	- Kubernetes Service performs similar functions to the Go Router in Cloud Foundry
+- Backend Services for the application are typically accessed using information from ConfigMaps and/or credentials from Secrets
+	- In Cloud Foundry this access information for backend services is read from VCAP_SERVICES environment variables
 @ulend
 @snapend
 @snap[east span-55 text-06]
@@ -40,9 +43,12 @@
 @snap[west span-45 text-06]
 
 @ul[](false)
-- OpenShift is based on Kubernetes technology, hence a lot of the concepts of Kubernetes applies to OpenShift
-- OpenShift uses Routes in place of Ingress entry, this is much more similar to CloudFoundry GO router with dynamically allocated hostnames that is addressable externally
-- OpenShift uses DeploymentConfig, which has more capabilities then a Kubernetes Deployment for application automatic (re)-deployment when the Image or Configuration does change
+- OpenShift is based on Kubernetes technology
+	- Most concepts of Kubernetes apply to OpenShift
+- OpenShift uses Routes in place of an Ingress entry
+	- Similar to Cloud Foundry GO router with dynamically allocated hostnames that are addressable externally
+- OpenShift uses a DeploymentConfig, which has more capabilities than a Kubernetes Deployment
+	- Automatic (re)-deployment when the Image or Configuration changes
 @ulend
 @snapend
 @snap[east span-55 text-06]
@@ -53,8 +59,8 @@
 
 - Collect build artifact, including perform maven, gradle or other build mechanism
 - Application is then staged into the Cloud platform; this staging process is typically split into:
-	- Container image creation
-	- Application deployment
+	- Application container image creation
+	- Application container deployment
 
 ![Application Staging](docs/images/staging.PNG)
 ---
@@ -70,14 +76,16 @@ All the following are performed by `cf push`
 - BuildPack prepares the artifacts to create a runnable unit (**Droplet**)
 - CloudFoundry stores the Droplet in the **Blob store**
 - CloudFoundry deploys the Droplet into its Runtime as a **Garden Container** and provides VCAP_SERVICES to access backend services
-- CloudFoundry associates the appropriate **Router entry**
+- CloudFoundry associates the appropriate **Router** entry
 @ulend
 @snapend
 
 @snap[east span-50 text-06]
 ### OpenShift
 @ul[](false)
-- Using a **BuildConfig** generates an **ImageStream** in OpenShift; the image can be build using Dockerfile or S2I process<br>`oc start-build <buildconfig_name>`
+- Using a **BuildConfig** generates an **ImageStream** in OpenShift; 
+	- The image can be build using Dockerfile or S2I process
+	<br>`oc start-build <buildconfig_name>`
 - Create ConfigMap and Secrets to access backend services
 - Use a Template object that contains at least a **DeploymentConfig** (with **Pod** definition), **Service** and **Route**:<br>`oc new-app -f <template.yaml>`
 @ulend
@@ -117,18 +125,20 @@ All the following are performed by `cf push`
 
 ## Migration approach
 
-
-- Allow developer to understand the process to deploy in Kubernetes
-- Build additional configuration files that should not change much provided the application is not changed significantly
-- Let developer to deploy manually to Kubernetes or load the process to automatically deploy using Jenkins pipeline
-- Prevent automation to create generic migration tool to have a CF application run directly in Kubernetes using buildpack simulation (ie https://buildpacks.io)
-- Tools should be run just once when developer need a quick jump-start into Kubernetes
+- Allow developer to understand the process of deploying to Kubernetes
+- Generate deployment configuration files for OpenShift & Kubernetes
+	- Should not need modification unless the application is changed significantly
+- Allow developer to deploy manually to Kubernetes or use artifacts to automatically deploy using Jenkins pipeline
+- Generate supportable application container images using standard base images
+	- Do not just simulate what the Cloud Foundry buildpack does (ie https://buildpacks.io)
+	- Do not create the same application container image as Cloud Foundry does
+- Tool should only need to be run once to migrate to OpenShift or Kubernetes
+	- After that, application can be maintained in the target environment
 
 ---
-
 ## Migration scripts
 
-The cf-migrate flow (Runtime/Buildpack specific):
+Main script cf-migrate.sh flow (Runtime/Buildpack specific):
 
 - Extract application artifact (get_source.sh)
 - Generate application configuration (server_xml.sh and vcap-liberty.sh for liberty; vcap.sh for all others)
@@ -148,6 +158,7 @@ The cf-migrate flow (Runtime/Buildpack specific):
 	- git
 	- curl
 	- xmlstarlet
+	- jdk
 	- maven or gradle
 - Or use the provided Docker image: ibmcloudacademy/cfmigrationtool
 	- Get the container image: <br/>`docker pull ibmcloudacademy/cfmigrationtool` 
@@ -160,8 +171,10 @@ Current limitation for the tool:
 
 - Only support gradle or maven as the build mechanism
 - Limited logic to manage complex application (ie multiple war files or non npm based nodejs)
-- Liberty apps must already have the DataSource and JDBC definition in server.xml file (will not build a JDBC structure in server.xml)
-- Must manually supply a VCAP_SERVICES content
+- Liberty apps must already have the DataSource and JDBC definition in server.xml file 
+	- Will not build a JDBC structure in server.xml
+- Must manually supply a VCAP_SERVICES environment variable value 
+	- The command is provided in documentation
 ---
 
 ## Running migration tool
