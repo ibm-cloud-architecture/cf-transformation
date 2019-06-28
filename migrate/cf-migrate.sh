@@ -24,10 +24,20 @@ fi
 
 if [ -z "$buildpack" ]; then
   buildpack="ibm-websphere-liberty"
+else
+  if [[ "$buildpack" != "nodejs" ]] && [[ "$buildpack" != "java" ]] && [[ "$buildpack" != *"liberty"* ]]; then
+    echo "Invalid buildpack, only liberty, java or nodejs are supported at this time"
+    exit 998
+  fi
 fi
 
 if [ -z "$target_env" ]; then
   target_env="openshift"
+else 
+  if [[ "$target_env" != "iks" ]] && [[ "$target_env" != "icp" ]] && [[ "$target_env" != "openshift" ]]; then
+    echo "Invalid target environment, only openshift, iks or icp are supported at this time"
+    exit 997
+  fi
 fi
 
 
@@ -43,9 +53,24 @@ else
   CONVDIR=$target_path
 fi
 
+if [[ -d "$target_path" ]]; then
+  read -r -p "The path ${target_path} exists. It will be overwritten. Are you sure? [y/N] " response
+  case "$response" in
+    [yY][eE][sS]|[yY]) 
+        ;;
+    *)
+        exit 990
+        ;;
+  esac
+elif [[ -f "$target_path" ]]; then
+  echo "Target path exists as a file, aborting"
+  exit 990
+fi
+ 
+
 CODEDIR=$( dirname "${BASH_SOURCE[0]}" )
 if [ $CODEDIR == "." ]; then
-  CODEDIR=`pwd`
+  CODEDIR=$(pwd)
 fi
 echo "Running command from" $CODEDIR
 
@@ -86,7 +111,7 @@ fi
 
 genfiles=""
 
-if [[ "$buildpack" == "ibm-websphere-liberty" ]]; then
+if [[ "$buildpack" == *"liberty"* ]]; then
   $CODEDIR/server_xml.sh ${TARGETDIR}
   if [[ -f $CODEDIR/vcap.json ]]; then
     VCAP_SERVICES=$(cat vcap.json)
@@ -123,11 +148,20 @@ if [[ -f "${source_path}/manifest.yml" ]]; then
   app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
 elif [[ -f "${TARGETDIR}/manifest.yml" ]]; then 
   app_name=$(cat ${TARGETDIR}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
-elif [[ "$TARGETFILE" != "" ]]; then
-  app_name="${TARGETFILE%.*}"
 else
-  app_name=$(basename ${TARGETPATH})
+  app_name=""
 fi
+
+if [[ -z "${app_name}" ]]; then
+  if [[ "$TARGETFILE" != "" ]]; then
+    app_name="${TARGETFILE%.*}"
+  else
+    app_name=$(basename ${TARGETDIR})
+  fi
+fi
+
+app_name=$(echo $app_name | tr [:upper:] [:lower:] | tr -s "*.<>_\!&#@%" "-")
+echo "Processing application ${app_name}."
 
 $CODEDIR/create_dockerfile.sh ${TARGETDIR} ${buildpack}
 
@@ -138,9 +172,7 @@ fi
 
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
 
-yaml_app_name=$(basename $source_path)
-
-$CODEDIR/create_yaml.sh ${TARGETDIR} ${yaml_app_name}
+$CODEDIR/create_yaml.sh ${TARGETDIR} ${app_name} ${buildpack}
 
 if [[ $? -gt 0 ]]; then
   echo "Yaml file creation failed"
@@ -153,7 +185,7 @@ fi
 
 echo $genfiles > ${TARGETDIR}/genfiles.txt
 
-$CODEDIR/writeout.sh ${TARGETDIR} ${yaml_app_name} ${buildpack} ${target_env}
+$CODEDIR/writeout.sh ${TARGETDIR} ${app_name} ${buildpack} ${target_env}
 
 rm ${TARGETDIR}/genfiles.txt
 

@@ -15,14 +15,14 @@ objects:
       generation: 1
       labels:
         app: ${APP_NAME}
-        deploymentconfig: ${APP_DC_NAME}
+        deploymentconfig: ${APP_NAME}
       name: ${APP_NAME}
     spec:
       replicas: 2
       revisionHistoryLimit: 5
       selector:
         app: ${APP_NAME}
-        deploymentconfig: ${APP_DC_NAME}
+        deploymentconfig: ${APP_NAME}
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
@@ -37,7 +37,7 @@ objects:
         metadata:
           labels:
             app: ${APP_NAME}
-            deploymentconfig: ${APP_DC_NAME}
+            deploymentconfig: ${APP_NAME}
         spec:
           containers:
             - image: ${TARGET_REPO}/${TARGET_WORKSPACE}/${APP_ARTIFACT_ID}:${TAG}
@@ -45,8 +45,6 @@ objects:
               name: ${APP_ARTIFACT_ID}
               ports:
                 - containerPort: 9080
-                  protocol: TCP
-                - containerPort: 9443
                   protocol: TCP
               resources: {}
               terminationMessagePath: /dev/termination-log
@@ -57,7 +55,8 @@ objects:
           securityContext: {}
           terminationGracePeriodSeconds: 30
       test: false
-      triggers: []
+      triggers:
+        - type: ConfigChange
   - apiVersion: v1
     kind: Service
     metadata:
@@ -73,13 +72,8 @@ objects:
           port: 9080
           protocol: TCP
           targetPort: 9080
-        - name: 9443-tcp
-          port: 9443
-          protocol: TCP
-          targetPort: 9443
       selector:
         app: ${APP_NAME}
-        deploymentconfig: ${APP_DC_NAME}
       sessionAffinity: None
       type: ClusterIP
     status:
@@ -101,14 +95,6 @@ objects:
       tls:
         termination: edge
 parameters:
-  - name: APP_NAME
-    description: Application Name. To be used for the buildconfig, deploymentconfig, and pods.
-  - name: TAG
-    description: TAG for the Image
-  - name: APP_DC_NAME
-    description: Name of the deployment Config
-  - name: APP_ARTIFACT_ID
-    description: Name of the artifact id
   - name: TARGET_REPO
     description: URI to the image repository
   - name: TARGET_WORKSPACE

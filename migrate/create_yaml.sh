@@ -16,6 +16,13 @@ then
   exit 999
 fi
 
+buildpack_name=$3
+
+if [ -z "$buildpack_name" ]
+then
+  exit 999
+fi
+
 # Copy Deployment YAML File templates
 
 chmod -R u+wx ${target_dir}
@@ -37,14 +44,22 @@ if [[ $? -gt 0 ]]; then
   exit 50
 fi
 
-# Substitute Application Name Values in Deployment YAML Files
+# Customize deployment YAML for different Buildpacks
 
-# OpenShift
-
-sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_DC_NAME}/dc-${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-template.yaml > ${deploy_oc}
-
-# Kubernetes
-
-sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-kube.yaml > ${deploy_kube}
+case ${buildpack_name} in
+  *liberty*)
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "/terminationMessagePolicy*/r deploy-libertycode.yaml" deploy-template.yaml > ${deploy_oc}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-kube.yaml > ${deploy_kube}
+  ;;
+  *java*)
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8080/g" deploy-template.yaml > ${deploy_oc}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8080/g" deploy-kube.yaml > ${deploy_kube}
+  ;;
+  *node*)
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8000/g" -e "/terminationMessagePolicy*/r deploy-nodecode.yaml" deploy-template.yaml > ${deploy_oc}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8000/g" deploy-kube.yaml > ${deploy_kube}
+  ;;
+  *) echo "Unsupported Buildpack: "${buildpack_name}; exit 1;;
+esac;
 
 exit 0

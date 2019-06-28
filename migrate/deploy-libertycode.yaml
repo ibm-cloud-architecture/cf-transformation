@@ -1,0 +1,6 @@
+              volumeMounts:
+                - mountPath: /opt/ibm/wlp/output
+                  name: liberty-output
+          volumes:
+            - name: liberty-output
+              emptydir: {}

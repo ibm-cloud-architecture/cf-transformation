@@ -39,21 +39,23 @@ To run the tool, perform the following:
 
 3. Get the content of your application VCAP_SERVICES from Cloud Foundry:
 
-		cf env <appname> | awk '/VCAP_SERVICES/{flag=1;next} /VCAP_APPLICATION/{flag=0} flag' | sed  -e '$d' | sed -e '$d' | sed -e ‘$d’ > vcap.json
+		cf env <appname> | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 
 3. Run the migration tool against your source:
 
 		./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type>
 
 	Where:
-		- `-s` source path or source git repository URL
-		- `-t` the temporary conversion directory where the work and output will be performed (default: /tmp/convdir)
-		- `-b` the application type (buildpack) ibm-websphere-liberty, java, nodejs etc
-		- `-e` target environment: openshift, iks or icp
+
+	- `-s` source path or source git repository URL
+	- `-t` the temporary conversion directory where the work and output will be performed (default: /tmp/convdir)
+	- `-b` the application type (buildpack) ibm-websphere-liberty, java, nodejs etc
+	- `-e` target environment: openshift, iks or icp
 
 
 To be able to successfully perform the rest of the migration, you will need:
 
+- docker
 - kubectl and CLI access to the kubernetes environment
 - Access to the cloud Foundry environment
 

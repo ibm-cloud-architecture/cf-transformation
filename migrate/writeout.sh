@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TGTPATH=$1 
+TGTPATH=$1
 TGTTYPE=$4
 APPLNAME=$2
 APPLTYPE=$3
@@ -11,39 +11,43 @@ if [ $CODEDIR == "." ]; then
   CODEDIR=`pwd`
 fi
 
-# Read result.html and write out result.html 
+# Read result.html and write out result.html
 IFS=$'\n'       # make newlines the only separator
 
 files=$(cat $TGTPATH/genfiles.txt)
 
-for line in $(cat $CODEDIR/result.html)    
+for line in $(cat $CODEDIR/result.html)
 do
   if [[ "$line" == ":genfiles." ]]; then
     echo $files
+  elif [[ "$line" == ":envvar." ]]; then
+    if [[ "$TGTTYPE" == "openshift" ]]; then
+      echo "<LI>The OpenShift server target. <XMP>export SERVER=<oc-url></XMP>"
+    elif [[ "$TGTTYPE" == "iks" ]]; then
+      echo "<LI>The IBM Kubernetes server cluster name. <XMP>export CLUSTER=mycluster</XMP>"
+    elif [[ "$TGTTYPE" == "icp" ]]; then
+      echo "<LI>The IBM Cloud Private master host name. <XMP>export SERVER=icpmaster.company.com</XMP>"
+    fi
   elif [[ "$line" == ":deployapp." ]]; then
-    if [[ "&TGTTYPE" == "openshift" ]]; then
+    if [[ "$TGTTYPE" == "openshift" ]]; then
       echo "<LI>Login to OpenShift"
-      echo "<XMP>oc login </XMP>"
+      echo "<XMP>oc login \${SERVER}</XMP>"
       echo "<LI>Create application from the deploy template"
-      echo "<XMP>oc new-app -f openshift/deploy-template.yaml -p &lt.var&gt.=&lt.value&gt.</XMP>"
+      echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_REPO=\${REPOHOST} -pTARGET_WORKSPACE=\${REPOSPACE}</XMP>"
     else
-      if [[ "&TGTTYPE" == "iks" ]]; then
+      if [[ "$TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"
-        echo "<XMP>ibmcloud login</XMP>"
-        echo "<XMP>ibmcloud ks cluster-config <clustername></XMP>"
+        echo "<XMP>ibmcloud login </XMP>"
+        echo "<XMP>ibmcloud ks cluster-config \${CLUSTER}</XMP>"
         echo "<XMP>export KUBECONFIG=<configfile></XMP>"
-      elif [[ "&TGTTYPE" == "icp" ]]; then
+      elif [[ "$TGTTYPE" == "icp" ]]; then
         echo "<LI>Login to IBM Cloud Private"
-        echo "<XMP>cloudctl login</XMP>"
-      else 
-        echo "Unsupported environment ${TGTTYPE}"
+        echo "<XMP>cloudctl login -a https://\${SERVER}</XMP>"
+      else
+        echo "<LI>Login to your Kubernetes environment.<XMP>kubectl config set-credentials . . .</XMP>"
       fi
-      echo "<LI>Create linkage for any backend services"
-      echo "<XMP>kubectl apply -f kube/parameter.yaml</XMP>"
-      echo "<LI>Deploy the application into the cluster"
-      echo "<XMP>kubectl apply -f kube/deployment.yaml</XMP>"
-      echo "<LI>Generate the service for the application"
-      echo "<XMP>kubectl apply -f kube/service.yaml</XMP>"
+      echo "<LI>Create objects for kubernetes"
+      echo "<XMP>kubectl apply -f deploy-kube/deploy-kube.yaml</XMP>"
     fi
   else
     line=$(echo $line | sed -e "s/\:applname./$APPLNAME/g" | sed -e "s/\:appltype./$APPLTYPE/g" | sed -e "s,\:tgtdir.,$TGTPATH,g" | sed -e "s/\:tgttype./$TGTTYPE/g")

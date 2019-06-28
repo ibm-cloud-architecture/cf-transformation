@@ -4,27 +4,26 @@
 </HEAD>
 <BODY>
 <H1>CloudFoundry Migration Tool</H1>
-<P>This migration tool is run against the application :applname. of type :appltype..</P>
+<P>This migration tool is run against the application <B>:applname.</B> of type <B>:appltype.</B>.</P>
 <H2>Generated files</H2>
-<P>These are the files that are stored in :tgtdir.. Some of these files may have to be modified manually as listed below:</P>
+<P>These are the files that are stored in <B>:tgtdir.</B>. Some of these files may have to be modified manually as listed below:</P>
 <UL>
 :genfiles.
 </UL>
 
-<H2>Testing your docker image</H2>
-<P>You can test your docker image by running it locally. This local testing may generate errors as there is no backend services available.</P>
-<OL>
-<LI>Generate your docker image<br/><XMP>cd :tgtdir.</XMP><br/><XMP>docker build -t :applname. .</XMP>
-<LI>Run your docker image<br/><XMP>docker run --rm --name testcon :applname. </XMP> <br/>You may have to map application ports to expose them so that you can access your application using <XMP>-p port:port</XMP>
-<LI>When you are done testing, you can remove your running docker using the command:<br/><XMP>docker stop testcon</XMP>
-</OL>
 <H2>Deploying application to :tgttype.</H2>
 <P>Perform the following actions:</P>
 <OL>
+<LI>You can setup environtment variables to make it easy to run the commands listed here:
+<UL>
+<LI>The docker image repository host (and port) that you will use such as docker.io for DockerHub, or icpmaster.com:8500, or <region>.icr.io or other repository hosts.  <XMP>export REPOHOST=docker.io</XMP>
+<LI>The namespace that you will store this image to. <XMP>export REPOSPACE=mynamespace</XMP>
+:envvar.
+</UL>
 <LI>Go to the conversion path directory <XMP>cd :tgtdir.</XMP>
 <LI>Generate the docker image:<XMP>docker build -t :applname. .</XMP>
-<LI>Tag the docker image for a docker repository that is accessible to the cluster.<XMP>docker tag :applname. <registry>/<namespace>/:applname.</XMP>
-<LI>Store the docker image into a docker repository that is accessible to the cluster.<XMP>docker push <registry>/<namespace>/:applname.</XMP>
+<LI>Tag the docker image for a docker repository that is accessible to the cluster.<XMP>docker tag :applname. ${REPOHOST}/${REPOSPACE}/:applname.</XMP>
+<LI>Store the docker image into a docker repository that is accessible to the cluster.<XMP>docker login ${REPOHOST}</XMP> <XMP>docker push ${REPOHOST}/${REPOSPACE}/:applname.</XMP>
 :deployapp.
 </OL>
 

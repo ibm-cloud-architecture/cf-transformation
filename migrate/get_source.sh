@@ -77,7 +77,9 @@ if [[ "$type" =~ (GIT|PATH)$ ]]; then
   manpath=`find . -name manifest.yml`
   tgtpath=`cat $manpath | grep "path:" | awk -F'path:' '{ print $NF }' | xargs`
   if [[ ! -z "$tgtpath" ]]; then
-    file=${file}/${tgtpath}
+    if [[ "$tgtpath" != "." ]]; then
+      file=${file}/${tgtpath}
+    fi
     if [[ -f "${target_path}/${file}" ]]; then
       mkdir ${target_path}/target
       cp ${manpath} ${target_path}/target
