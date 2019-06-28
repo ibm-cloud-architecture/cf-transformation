@@ -1,8 +1,14 @@
-# Exercises
+# Application Migration Exercises
 
-There are several flavor of the exercises:
+These exercises provide step-by-step instructions for using the migration tool to migrate various sample applications. The sample applications are:
+
+- Java using the `ibm-websphere-liberty` buildpack
+- Java Springboot using the `java` (Tomcat) buildpack
+- Node.js using the `nodejs` buildpack
+ 
+The migration tool is used to migrate to the following platforms:
 
 - [OpenShift](openshift.md)
-- [IKS](iks.md)
-- [ICP](icp.md)
+- [IKS - Coming Soon](iks.md)
+- [ICP - Coming Soon](icp.md)
 
