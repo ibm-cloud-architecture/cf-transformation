@@ -57,9 +57,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - http:
+  - host: ${APP_NAME}.${CLUSTER_NAME}.${REGION}.containers.appdomain.cloud
+    http:
       paths:
-      - path: /${APP_NAME}
+      - path: /
         backend:
           serviceName: ${APP_NAME}-service
           servicePort: 9080
