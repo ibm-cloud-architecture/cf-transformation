@@ -10,6 +10,9 @@
         <tcpOptions soReuseAddr="true"/>
     </httpEndpoint>
     -->
+    
+    <application name="JavaHelloWorldApp" context-root="/" location="JavaHelloWorldApp.war" type="war"/>
+
     <!--
     <include location="runtime-vars.xml" />
     -->
