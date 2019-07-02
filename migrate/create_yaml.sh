@@ -44,20 +44,28 @@ if [[ $? -gt 0 ]]; then
   exit 50
 fi
 
+# Capture VCAP SERVICES for Kubernetes secrets
+
+if [ -f vcap.json ]; then
+  vcap=$(cat vcap.json | base64)
+else
+  vcap=$(echo "{}" | base64)
+fi
+
 # Customize deployment YAML for different Buildpacks
 
 case ${buildpack_name} in
   *liberty*)
-  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "/terminationMessagePolicy*/r deploy-libertycode.yaml" deploy-template.yaml > ${deploy_oc}
-  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" deploy-kube.yaml > ${deploy_kube}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/\${VCAP}/${vcap}/g" -e "/terminationMessagePolicy*/r deploy-libertycode.yaml" deploy-template.yaml > ${deploy_oc}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/\${VCAP}/${vcap}/g" deploy-kube.yaml > ${deploy_kube}
   ;;
   *java*)
-  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8080/g" deploy-template.yaml > ${deploy_oc}
-  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8080/g" deploy-kube.yaml > ${deploy_kube}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8080/g" -e "s/\${VCAP}/${vcap}/g" deploy-template.yaml > ${deploy_oc}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8080/g" -e "s/\${VCAP}/${vcap}/g" deploy-kube.yaml > ${deploy_kube}
   ;;
   *node*)
-  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8000/g" -e "/terminationMessagePolicy*/r deploy-nodecode.yaml" deploy-template.yaml > ${deploy_oc}
-  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8000/g" deploy-kube.yaml > ${deploy_kube}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8000/g" -e "s/\${VCAP}/${vcap}/g" -e "/env\:*/r deploy-nodecode.yaml" deploy-template.yaml > ${deploy_oc}
+  sed -e "s/\${APP_NAME}/${app_name}/g" -e "s/\${APP_ARTIFACT_ID}/${app_name}/g" -e "s/\${TAG}/latest/g" -e "s/9080/8000/g" -e "s/\${VCAP}/${vcap}/g" -e "/env\:*/r deploy-nodecode-kube.yaml" deploy-kube.yaml > ${deploy_kube}
   ;;
   *) echo "Unsupported Buildpack: "${buildpack_name}; exit 1;;
 esac;
