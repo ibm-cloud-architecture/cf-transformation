@@ -9,8 +9,9 @@
 # -e: Target environment (default: openshift; option openshift, iks, icp)
 # . . . (wait for Dave, if he needs more options
 
-
+force=""
 while [[ "$#" -gt 0 ]]; do case $1 in
+  -y) force="yes";;
   -t) target_path="$2"; shift;;
   -b) buildpack="$2";shift;;
   -s) source_path="$2";shift;;
@@ -53,7 +54,7 @@ else
   CONVDIR=$target_path
 fi
 
-if [[ -d "$target_path" ]]; then
+if [[ -d "$target_path" ]] && [[ -z "$force" ]]; then
   read -r -p "The path ${target_path} exists. It will be overwritten. Are you sure? [y/N] " response
   case "$response" in
     [yY][eE][sS]|[yY]) 

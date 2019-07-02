@@ -1,0 +1,143 @@
+<HTML>
+<HEAD>
+<TITLE>CF migration toolbox</TITLE>
+<link rel="stylesheet" type="text/css" href="cfmigrate.css"> 
+
+</HEAD>
+<BODY onload="showMigrate()">
+<H1>CloudFoundry Migration Tool</H1>
+
+<DIV ID="mainBody">
+  <DIV ID="formMain">
+    <P>Source repo: <input name="source" id="source" type="text"></P>
+    <P>Processing path: <input name="tmpdir" id="tmpdir" type="text" value="/data"></P>
+    <P>BuildPack: <select name="BuildPack" id="buildpack">
+      <option value="ibm-websphere-liberty" selected>Liberty</option>
+      <option value="nodejs">NodeJS</option>
+      <option value="java">Java</option>
+    </select></P>
+    <P>Target environment: <select name="Target" id="target">
+      <option value="openshift" selected>OpenShift</option>
+      <option value="iks">IBM Kubernetes Services</option>
+      <option value="icp">IBM Cloud Private</option>
+    </select></P>
+  
+    <button onclick="runMigrate()" id="runMigrate" >Run Migration</button>
+  </DIV>
+  <DIV ID="formOutput">
+     <DIV ID="stdout"></DIV>
+     <button onclick="showResult()" id="showResult" >Show Result</button>
+     <input ID="resFile" type="hidden" value=""/>
+  </DIV>
+  <DIV ID="result">
+     <DIV ID="resultArea"></DIV>
+     <button onclick="showMigrate()" id="showMigrate" >Run Again</button>
+  </DIV>
+ 
+</DIV>
+<script src="/srv/jquery.min.js"></script>
+<SCRIPT>
+
+    function showResult() {
+        var res = document.getElementById("result");
+        res.style.display = "block";
+        var fou = document.getElementById("formOutput");
+        fou.style.display = "none";
+        var fmn = document.getElementById("formMain");
+        fmn.style.display = "none";
+        var rfile = document.getElementById("resFile").value;
+        $.get("/result?result="+rfile).then(function(data){
+        document.getElementById("resultArea").innerHTML = data;
+        });
+    }
+
+    function showMigrate() {
+        var res = document.getElementById("result");
+        res.style.display = "none";
+        var fou = document.getElementById("formOutput");
+        fou.style.display = "block";
+        var fmn = document.getElementById("formMain");
+        fmn.style.display = "block";
+
+        $("#showResult").attr("disabled", true);
+        $("#runMigrate").attr("disabled", false);
+    }
+
+    function runMigrate() {
+        // check fields
+        console.log("Run migrate");
+        $("#runMigrate").attr("disabled", true);
+        src = document.getElementById("source").value;
+        tmp = document.getElementById("tmpdir").value;
+        type = document.getElementById("buildpack").value;
+        tgt = document.getElementById("target").value;
+        if (src != "" && tmp != "") {
+          var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt;
+          $.get("/invoke?"+qstr).then(function(data){
+            console.log(data);
+            document.getElementById("stdout").innerHTML="<pre>"+data+"</pre>";
+    var lines = data.split("\n");
+    var lastLine = lines[lines.length - 2];
+    console.log(lastLine);
+            // var lastLine = data.substr(data.lastIndexOf("\n")+1);
+            document.getElementById("resFile").value=lastLine;
+            $("#showResult").attr("disabled",false);
+          });
+        }
+    }
+    function createNew() {
+        console.log("Create new");
+        var x = document.getElementById("pathValue").value;
+        document.getElementById("createNew").setAttribute("disabled","disabled");
+        document.getElementById("open").setAttribute("disabled","disabled");
+        document.getElementById("linksholder").setAttribute("disabled","disabled");
+        $.get('/newPath?path='+x).then(function(data){
+            // go to editView
+            console.log("before redirect");
+            window.location.replace("/srv/editView.html");
+        });
+        window.alert("Cloning repo, please wait ...");
+        console.log(x);
+    }
+    function openExisting() {
+        console.log("Open Existing");
+        var x = document.getElementById("pathValue").value;
+        $.get('/setPath?path='+x).then(function(data){
+            // go to editView
+            window.location.replace("/srv/editView.html");
+        });
+        console.log(x);
+    }
+    function selectPath() {
+        var curPath = document.getElementById("curPath").innerHTML;
+        console.log(curPath);
+        
+        document.openPath.pathValue.value = curPath;
+        return curPath;
+    }
+  
+    function rePopulate(newPath) {
+        $.get('/files?path='+newPath).then(function(data){
+          var tblHead = "<tr><th>Name</th><th>Path</th></tr>";
+          var tblBody = "";
+          //tblData += "<tr onclick='rePopulate(..)'><td>..</td><td>..</td></tr>";
+          while (data.length>0) {
+             var dir = data.pop();
+             dir = JSON.stringify(dir);
+             dir = JSON.parse(dir);
+             var tdstr = "";
+             var tdend = "";
+             if (data.length==1) {
+                tdstr = '<div class="curPath" id="curPath">';
+                tdend = '</div>';
+             } 
+             tblBody = "<tr onclick='rePopulate(\""+dir.Path.replace(/\\/g,"\\\\")+"\")'><td>"+dir.Name+'</td><td>'+tdstr+dir.Path+tdend+'</td></tr>' + tblBody;
+             
+          }
+          $("#linksholder").html(tblHead+tblBody);
+        });   
+    }
+      
+</script>
+</BODY>
+</HTML>
