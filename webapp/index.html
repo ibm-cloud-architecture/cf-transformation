@@ -1,15 +1,15 @@
 <HTML>
 <HEAD>
 <TITLE>CF migration toolbox</TITLE>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="cfmigrate.css"> 
 
 </HEAD>
 <BODY onload="showMigrate()">
 <H1>CloudFoundry Migration Tool</H1>
-
-<DIV ID="mainBody">
   <DIV ID="formMain">
-    <P>Source repo: <input name="source" id="source" type="text"></P>
+    <P>VCAP_SERVICES: <textarea name="vcap" id="vcap" cols="40" rows="5"></textarea></P>
+    <P>Source repo: <input name="source" id="source" size=70 type="text"></P>
     <P>Processing path: <input name="tmpdir" id="tmpdir" type="text" value="/data"></P>
     <P>BuildPack: <select name="BuildPack" id="buildpack">
       <option value="ibm-websphere-liberty" selected>Liberty</option>
@@ -34,7 +34,6 @@
      <button onclick="showMigrate()" id="showMigrate" >Run Again</button>
   </DIV>
  
-</DIV>
 <script src="/srv/jquery.min.js"></script>
 <SCRIPT>
 
@@ -47,7 +46,7 @@
         fmn.style.display = "none";
         var rfile = document.getElementById("resFile").value;
         $.get("/result?result="+rfile).then(function(data){
-        document.getElementById("resultArea").innerHTML = data;
+             document.getElementById("resultArea").innerHTML = data;
         });
     }
 
@@ -67,13 +66,24 @@
         // check fields
         console.log("Run migrate");
         $("#runMigrate").attr("disabled", true);
+        document.getElementById("stdout").innerHTML = "<i class='fa fa-spinner fa-spin' style='font-size:48px;color:red'></i> ";
         src = document.getElementById("source").value;
         tmp = document.getElementById("tmpdir").value;
         type = document.getElementById("buildpack").value;
         tgt = document.getElementById("target").value;
         if (src != "" && tmp != "") {
+          var data = ""
           var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt;
-          $.get("/invoke?"+qstr).then(function(data){
+          var xhttp = new XMLHttpRequest();
+          xhttp.open('get', "/invoke?"+qstr);
+          xhttp.send();
+          xhttp.onprogress = function() {
+             data += this.responseText;
+             document.getElementById("stdout").innerHTML="<pre>"+data+"</pre>";
+             console.log(this.responseText);
+          }
+          xhttp.onload = function() {
+            data = this.response;
             console.log(data);
             document.getElementById("stdout").innerHTML="<pre>"+data+"</pre>";
     var lines = data.split("\n");
@@ -82,62 +92,9 @@
             // var lastLine = data.substr(data.lastIndexOf("\n")+1);
             document.getElementById("resFile").value=lastLine;
             $("#showResult").attr("disabled",false);
-          });
+          };
         }
     }
-    function createNew() {
-        console.log("Create new");
-        var x = document.getElementById("pathValue").value;
-        document.getElementById("createNew").setAttribute("disabled","disabled");
-        document.getElementById("open").setAttribute("disabled","disabled");
-        document.getElementById("linksholder").setAttribute("disabled","disabled");
-        $.get('/newPath?path='+x).then(function(data){
-            // go to editView
-            console.log("before redirect");
-            window.location.replace("/srv/editView.html");
-        });
-        window.alert("Cloning repo, please wait ...");
-        console.log(x);
-    }
-    function openExisting() {
-        console.log("Open Existing");
-        var x = document.getElementById("pathValue").value;
-        $.get('/setPath?path='+x).then(function(data){
-            // go to editView
-            window.location.replace("/srv/editView.html");
-        });
-        console.log(x);
-    }
-    function selectPath() {
-        var curPath = document.getElementById("curPath").innerHTML;
-        console.log(curPath);
-        
-        document.openPath.pathValue.value = curPath;
-        return curPath;
-    }
-  
-    function rePopulate(newPath) {
-        $.get('/files?path='+newPath).then(function(data){
-          var tblHead = "<tr><th>Name</th><th>Path</th></tr>";
-          var tblBody = "";
-          //tblData += "<tr onclick='rePopulate(..)'><td>..</td><td>..</td></tr>";
-          while (data.length>0) {
-             var dir = data.pop();
-             dir = JSON.stringify(dir);
-             dir = JSON.parse(dir);
-             var tdstr = "";
-             var tdend = "";
-             if (data.length==1) {
-                tdstr = '<div class="curPath" id="curPath">';
-                tdend = '</div>';
-             } 
-             tblBody = "<tr onclick='rePopulate(\""+dir.Path.replace(/\\/g,"\\\\")+"\")'><td>"+dir.Name+'</td><td>'+tdstr+dir.Path+tdend+'</td></tr>' + tblBody;
-             
-          }
-          $("#linksholder").html(tblHead+tblBody);
-        });   
-    }
-      
 </script>
 </BODY>
 </HTML>

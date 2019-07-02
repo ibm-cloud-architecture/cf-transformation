@@ -2,6 +2,7 @@ var url = require('url');
 var path = require('path');
 var http = require('http');
 var express = require('express')
+var spawn = require('child_process').spawn
 var app = express();
 var fs = require('fs');
 
@@ -39,11 +40,20 @@ app.get('/invoke', function(req, res) {
         tgtarg = req.query.tgt;
         tmparg = req.query.tmp;
 
-        stdout = shell.exec('cd ../migrate;./cf-migrate.sh -y -s '+srcarg+' -t '+tmparg+' -b '+bpkarg+' -e '+tgtarg, {silent:true}).stdout;
-        var reply = stdout;
-        res.end(reply);
+        res.writeHead(200, { 'Content-Type': 'text/plain' })
+        var migrate = spawn('/bin/bash',['-c','pwd;cd ../migrate;./cf-migrate.sh -y -s '+srcarg+' -t '+tmparg+' -b '+bpkarg+' -e '+tgtarg]);
+        migrate.stdout.on('data',function (data) {
+           res.write(data);
+        });
+        migrate.stderr.on('data',function (data) {
+           res.write(data);
+        });
+        migrate.on('exit',function (code) {
+           //res.write("RC: "+code);
+           res.end();
+        });
     } catch(e) {
-        res.writeHead(500)
+        //res.writeHead(500)
         res.end()     // end the response so browsers don't hang
         console.log(e.stack)
     }  
