@@ -9,5 +9,7 @@ CMD bash
 RUN apt-get update;apt-get install -y default-jdk
 RUN apt-get update;apt-get install -y software-properties-common apt-transport-https
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -;add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable";apt-get update; apt-get install -y docker-ce
-RUN apt-get update;apt-get install -y vim
+RUN apt-get update;apt-get install -y vim nodejs npm
+RUN ibmcloud plugin install container-service
+RUN ibmcloud plugin install container-registry
 
