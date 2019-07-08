@@ -8,7 +8,7 @@
 <BODY onload="showMigrate()">
 <H1>CloudFoundry Migration Tool</H1>
   <DIV ID="formMain">
-    <P>VCAP_SERVICES: <textarea name="vcap" id="vcap" cols="40" rows="5"></textarea></P>
+    <P>VCAP_SERVICES: <textarea name="vcap" id="vcap" cols="40" rows="5" value="{}"></textarea></P>
     <P>Source repo: <input name="source" id="source" size=70 type="text"></P>
     <P>Processing path: <input name="tmpdir" id="tmpdir" type="text" value="/data"></P>
     <P>BuildPack: <select name="BuildPack" id="buildpack">
@@ -67,13 +67,17 @@
         console.log("Run migrate");
         $("#runMigrate").attr("disabled", true);
         document.getElementById("stdout").innerHTML = "<i class='fa fa-spinner fa-spin' style='font-size:48px;color:red'></i> ";
+        vcap = document.getElementById("vcap").value;
+        if (vcap == "") {
+          vcap="{}"
+        }
         src = document.getElementById("source").value;
         tmp = document.getElementById("tmpdir").value;
         type = document.getElementById("buildpack").value;
         tgt = document.getElementById("target").value;
         if (src != "" && tmp != "") {
           var data = ""
-          var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt;
+          var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt"&vcap="+vcap;
           var xhttp = new XMLHttpRequest();
           xhttp.open('get', "/invoke?"+qstr);
           xhttp.send();

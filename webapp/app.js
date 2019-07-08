@@ -39,9 +39,10 @@ app.get('/invoke', function(req, res) {
         bpkarg = req.query.type;
         tgtarg = req.query.tgt;
         tmparg = req.query.tmp;
+        vcap = req.query.vcap;
 
         res.writeHead(200, { 'Content-Type': 'text/plain' })
-        var migrate = spawn('/bin/bash',['-c','pwd;cd ../migrate;./cf-migrate.sh -y -s '+srcarg+' -t '+tmparg+' -b '+bpkarg+' -e '+tgtarg]);
+        var migrate = spawn('/bin/bash',['-c','pwd;cd ../migrate;echo '+vcap+' >vcap.json;./cf-migrate.sh -y -s '+srcarg+' -t '+tmparg+' -b '+bpkarg+' -e '+tgtarg]);
         migrate.stdout.on('data',function (data) {
            res.write(data);
         });
