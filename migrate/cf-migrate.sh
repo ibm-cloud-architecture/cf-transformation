@@ -171,6 +171,8 @@ if [[ $? -gt 0 ]]; then
   exit 40
 fi
 
+echo "Finish creating dockerfile ..."
+
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
 
 $CODEDIR/create_yaml.sh ${TARGETDIR} ${app_name} ${buildpack}
@@ -180,6 +182,7 @@ if [[ $? -gt 0 ]]; then
   exit 50
 fi
 
+echo "Finish creating YAML ..."
 #########################################
 # finalize output
 #########################################
