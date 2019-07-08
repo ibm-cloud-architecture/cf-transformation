@@ -46,8 +46,15 @@ fi
 
 # Capture VCAP SERVICES for Kubernetes secrets
 
+os=$(uname)
+if [[ "$uname" != "Darwin" ]]; then
+  b64opt="-w 0"
+else
+  b64opt=""
+fi
+
 if [ -f vcap.json ]; then
-  vcap=$(cat vcap.json | base64)
+  vcap=$(cat vcap.json | base64 $b64opt)
 else
   vcap=$(echo "{}" | base64)
 fi
