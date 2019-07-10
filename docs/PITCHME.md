@@ -202,6 +202,7 @@ Current limitation for the tool:
 @snap[west span-50 text-06]
 
 - Run the Web application
+
 	`cd /cf-transformation/webapp`
 	`npm install`
 	`nodejs app.js`
@@ -213,7 +214,7 @@ Current limitation for the tool:
 @snapend
 
 @snap[east span-50]
-![IMAGE](docs/images/index2.PNG)
+![IMAGE](docs/images/index2.png)
 @snapend
 ---
 ## Deploy output (1 of 2)
