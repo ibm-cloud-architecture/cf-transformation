@@ -8,6 +8,9 @@ This exercise guides you through using the migration tool for the following exam
 - Node.js application accessed from a Git repository 
 
 The migration tool is run from the provided Docker container.
+In the beginning of the exercises, you would deploy the application to a CloudFoundry platform, the instructions here are for deploying these applications to the IBM Cloud Public CloudFoundry platform.
+The applications that are deployed to CloudFoundry is used for two purposes, a comparison of the running application (validating that the application *do* run in CloudFoundry) and to be used to extract the credential for the backend services in the VCAP_SERVICES environment variable.
+You can basically use any application that can be deployed to CloudFoundry for doing these exercises.
 
 ## Liberty hello-world application accessed from downloaded `exemplar` sub-directory
 
