@@ -24,6 +24,9 @@ To use the Web application, perform the following:
 4. Start the application:
 
 		node app.js
+	or
+
+		nodejs app.js
 
 5. Open a Web browser to get to the application port 8000 (ie `http://localhost:8000`)
 

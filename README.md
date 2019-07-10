@@ -23,6 +23,7 @@ The tool is packaged in a GitHub repository at [this link](https://github.com/ib
 - bash
 - docker
 - jq
+- Java Development Kit 
 - git
 - curl
 - xmlstarlet

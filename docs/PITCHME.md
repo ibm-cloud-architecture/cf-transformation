@@ -163,7 +163,7 @@ Main script cf-migrate.sh flow (Runtime/Buildpack specific):
 - Or use the provided Docker image: ibmcloudacademy/cfmigrationtool
 	- Get the container image: <br/>`docker pull ibmcloudacademy/cfmigrationtool` 
 	- Use a path from the host that you will use to store the output, assuming that you use /Users/ibmuser/data:<br/>
-`docker run --net=host -v /Users/ibmuser/data:/data -it ibmcloudacademy/cfmigrationtool bash`
+`docker run -p 8000:8000 -v /Users/ibmuser/data:/data -it ibmcloudacademy/cfmigrationtool bash`
 ---
 ## Limitation
 
@@ -195,6 +195,26 @@ Current limitation for the tool:
 ---
 ## Sample output
 ![IMAGE](docs/images/toolrun.PNG)
+---
+@snap[north-east span-99 text-09]
+## Using the Web application
+@snapend
+@snap[west span-50 text-06]
+
+- Run the Web application
+	`cd /cf-transformation/webapp`
+	`npm install`
+	`nodejs app.js`
+
+- Access the Web application in `http://localuser:8000`
+- Specify the options and click **Run migration**
+- Once the messages of the script appear, click **Show result**
+- The result.html is shown in the page
+@snapend
+
+@snap[east span-50]
+![IMAGE](docs/images/index2.PNG)
+@snapend
 ---
 ## Deploy output (1 of 2)
 ![IMAGE](docs/images/output1.PNG)

@@ -25,6 +25,7 @@ do
       echo "<LI>The OpenShift server target. <XMP>export SERVER=<oc-url></XMP>"
     elif [[ "$TGTTYPE" == "iks" ]]; then
       echo "<LI>The IBM Kubernetes server cluster name. <XMP>export CLUSTER=mycluster</XMP>"
+      echo "<LI>The IBM Kubernetes server region name. <XMP>export REGION=us-south</XMP>"
     elif [[ "$TGTTYPE" == "icp" ]]; then
       echo "<LI>The IBM Cloud Private master host name. <XMP>export SERVER=icpmaster.company.com</XMP>"
     fi
@@ -47,7 +48,7 @@ do
         echo "<LI>Login to your Kubernetes environment.<XMP>kubectl config set-credentials . . .</XMP>"
       fi
       echo "<LI>Create objects for kubernetes"
-      echo "<XMP>cat deploy-kube/deploy-kube.yaml | sed -e \"s/\\\${TARGET_REPO}/\$REPOHOST/g\" | sed -e \"s/\\\${TARGET_SPACE}/\$REPOSPACE/g\" > deploy-kube/deploy.yaml</XMP>"
+      echo "<XMP>cat deploy-kube/deploy-kube.yaml | sed -e \"s/\\\${TARGET_REPO}/\$REPOHOST/g\" -e \"s/\\\${TARGET_SPACE}/\$REPOSPACE/g\" -e \"s/\\${CLUSTER}/\$CLUSTER/g\" -e \"s/\\${REGION}/\$REGION/g\" > deploy-kube/deploy.yaml</XMP>"
       echo "<XMP>kubectl apply -f deploy-kube/deploy.yaml</XMP>"
 
       echo "<LI>Application can be accessed through the ingress entry or the NodePort service that you create"
