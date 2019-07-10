@@ -44,7 +44,7 @@ To run the tool, perform the following:
 
 3. Get the content of your application's VCAP_SERVICES environment variables from Cloud Foundry. Most importantly, these variables contain the names, descriptions, and credentials required to access any backend services used by the application:
 
-		cf env <appname> | awk '/VCAP_SERVICES/{flag=1;next} /VCAP_APPLICATION/{flag=0} flag' | sed  -e '$d' | sed -e '$d' | sed -e ‘$d’ > vcap.json
+		cf env <appname> | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 
 3. Run the migration tool against your application source code:
 
