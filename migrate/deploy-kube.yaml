@@ -56,7 +56,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: ${APP_NAME}.${CLUSTER_NAME}.${REGION}.containers.appdomain.cloud
+  - host: ${INGRESS}
     http:
       paths:
       - path: /

@@ -77,7 +77,7 @@
         tgt = document.getElementById("target").value;
         if (src != "" && tmp != "") {
           var data = ""
-          var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt"&vcap="+vcap;
+          var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt+"&vcap="+vcap;
           var xhttp = new XMLHttpRequest();
           xhttp.open('get', "/invoke?"+qstr);
           xhttp.send();

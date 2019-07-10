@@ -47,7 +47,7 @@ fi
 # Capture VCAP SERVICES for Kubernetes secrets
 
 os=$(uname)
-if [[ "$uname" != "Darwin" ]]; then
+if [[ "$os" != "Darwin" ]]; then
   b64opt="-w 0"
 else
   b64opt=""
