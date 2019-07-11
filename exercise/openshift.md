@@ -14,9 +14,13 @@ You can basically use any application that can be deployed to CloudFoundry for d
 
 ## Liberty hello-world application accessed from downloaded `exemplar` sub-directory
 
-Perform the following steps:
+In this first case, you will migrate an application that runs on WebSphere Liberty in CloudFoundry and has dependency on several custom user-provided services. The task is divided into several stages which are listed below.
 
-1. Run the provided docker image. You should have Docker installed and running on your system. Provide a local directory path that is empty to be used as the conversion working directory. This command connects you to a bash shell inside the migration tool container.
+### Preparing the environment
+
+You run this preparation steps only once. Subsequent labs do not need you to redo these steps: 
+
+1. Run the provided docker image. You should have Docker installed and running on your system. Provide a local directory path that is empty to be used as the conversion working directory. This command connects you to a bash shell inside the migration tool container. 
 
 		docker run -v <your_local_path>:/data -v /var/run/docker.sock:/var/run/docker.sock -it ibmcloudacademy/cfmigrationtool bash
 
@@ -25,7 +29,13 @@ Perform the following steps:
 
 		git clone https://github.com/ibm-cloud-architecture/cf-transformation
 
-3. Go to the example application code directory:
+	The result here is that you have the `/cf-transformation` directory that contains the conversion code.
+
+### Testing the CloudFoundry environment
+
+As mentioned in the beginning of the exercise, you will deploy the application to CloudFoundry. This stage verifies that the application is valid and allows you to collect the proper VCAP_SERVICES environment variable for the application. The binding of backend services to the application is typically performed by the VCAP_SERVICES.
+
+1. Go to the example application code directory:
 
 		cd cf-transformation/exemplar/hello-world
 	![Download code](images/001-docker.png)
@@ -63,6 +73,10 @@ Perform the following steps:
 		ibmcloud cf env abc-hello-world | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 		cat vcap.json
 
+### Run the migration tool and deploy the application to OpenShift
+
+The last stage of the migration is performed for the specific target environment. 
+
 9. Run the migration command:
 
 		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e openshift -b ibm-websphere-liberty
@@ -77,7 +91,7 @@ Perform the following steps:
 	- Namespace (REPOSPACE). Your own namespace in DockerHub (similar to your userID)
 	- Openshift cluster host URL (SERVER)
 
-	Note that for login to the OpenShift cluster using `oc login` command, you may be asked to get a login token from the server. You can easily get this from a login session to the OpenShift Web Console GUI.
+	Note that for login to the OpenShift cluster using `oc login` command, you may be asked to get a login token from the server. You can easily get this token from a login session to the OpenShift Web Console GUI. The commands that are listed in the steps 2 and later are using the environment variables that are set above can should be able to run as-is, directly cut-and-pasted from the `result.html` to the bash prompt of the cfmigrationtool container. 
 
 	![Output1](images/007-1-output.png)
 	![Output2](images/007-2-output.png)
@@ -88,6 +102,8 @@ Perform the following steps:
 
 ## Liberty hello-world application accessed from a Git repository
 
+The second test case, you will migrate content that is retrieved directly from a git repository. This sample application does not use any backend service, hence you do not need to collect VCAP_SERVICES value. The steps listed here can be performed directly similar to the third stage of the previous exercise. 
+
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
@@ -97,6 +113,7 @@ Perform the following steps:
 
 ## SpringBoot application (jar file) accessed from a Git repository
 
+The third test case, you will migrate a SpringBoot REST application from a git repository. This sample application does not use any backend service, hence you do not need to collect VCAP_SERVICES value. The steps listed here can be performed directly similar to the third stage of the first exercise. 
 
 1. Go back to the `migrate` directory and run the following command:
 
@@ -108,6 +125,7 @@ Perform the following steps:
 
 ## Node.js application accessed from a Git repository
 
+The fourth test case, you will migrate a Node.js application from a git repository. This sample application does not use any backend service, hence you do not need to collect VCAP_SERVICES value. The steps listed here can be performed directly similar to the third stage of the first exercise. 
 
 1. Go back to the `migrate` directory and run the following command:
 
@@ -116,4 +134,27 @@ Perform the following steps:
 
 2. Open the `result.html` file in subdirectory `cfnodejs/node-helloworld`in a Web browser and follow the instructions similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/`.<br>![Node](images/nodehello.png)
 
+## Node.js with a Cloudant backend
+ 
+This last test case, demonstrate another example that will use a backend service. This sample application uses a Cloudant database, hence in this case you would deploy the application in CloudFoundry first to collect the VCAP_SERVICES information.
+
+1. Prepare the application, assuming you are still logged on to IBM Cloud Public.
+
+		git clone https://github.com/IBM-Cloud/nodejs-cloudant.git
+		cd nodejs-cloudant
+		ibmcloud app push
+
+	- The application and its cloudant service will be deployed automatically. The route is shown at the end of the deployment. <br>![deploy](images/deploycld.png)
+	- Open the application and be sure to try uploading a file to the organizer application, use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same cloudant backend. <br>![organizer](images/organizer.png)
+
+2. Extract the VCAP_SERVICES:
+
+		cd /cf-transformation/migrate
+		ibmcloud cf env sample-nodejs-cloudant | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
+		
+3. Run the migration tool:
+
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e openshift -b nodejs
+
+2. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant`in a Web browser and follow the instructions similar to the first section. Check whether the application launched and can be accessed. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded in step 1 exists.
 
