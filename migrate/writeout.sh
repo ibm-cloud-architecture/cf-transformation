@@ -35,7 +35,7 @@ do
       echo "<XMP>oc login \${SERVER}</XMP>"
       echo "<LI>Create application from the deploy template"
       echo "<XMP>oc new-app -f deploy-openshift/deploy-template.yaml -pTARGET_REPO=\${REPOHOST} -pTARGET_WORKSPACE=\${REPOSPACE}</XMP>"
-      echo "<LI>Application can be accessed from the route that you established in deploy-template object"
+      echo "<LI>Application can be accessed from the route that you established in the deploy-template object. You can also find it with the 'oc get routes' command"
     else
       if [[ "$TGTTYPE" == "iks" ]]; then
         echo "<LI>Login to IBM Cloud"
