@@ -2,10 +2,11 @@
 
 This exercise guides you through using the migration tool for the following example applications:
 
-- Liberty hello-world application accessed from the downloaded `exemplar` sub-directory
+- Liberty hello-world application accessed from downloaded `exemplar` sub-directory
 - Liberty hello-world application accessed from a Git repository
 - SpringBoot application (jar file) accessed from a Git repository
-- Node.js application accessed from a Git repository 
+- Node.js application accessed from a Git repository
+- Node.js with a Cloudant backend
 
 The migration tool is run from the provided Docker container.
 In the beginning of the exercises, you would deploy the application to a CloudFoundry platform, the instructions here are for deploying these applications to the IBM Cloud Public CloudFoundry platform.
@@ -18,7 +19,7 @@ In this first case, you will migrate an application that runs on WebSphere Liber
 
 ### Preparing the environment
 
-You run this preparation steps only once. Subsequent labs do not need you to redo these steps: 
+You run this preparation steps only once. Subsequent labs do not need you to redo these steps: 
 
 1. Run the provided docker image. You should have Docker installed and running on your system. Provide a local directory path that is empty to be used as the conversion working directory. This command connects you to a bash shell inside the migration tool container. 
 
