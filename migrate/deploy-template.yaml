@@ -51,7 +51,7 @@ objects:
               - name: VCAP_SERVICES
                 valueFrom:
                   secretKeyRef:
-                    name: vcap-services
+                    name: ${APP_NAME}-vcap-services
                     key: vcap
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
@@ -66,7 +66,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: vcap-services
+      name: ${APP_NAME}-vcap-services
     type: Opaque
     data:
       vcap: ${VCAP}

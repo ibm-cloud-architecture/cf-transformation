@@ -18,7 +18,7 @@ spec:
           - name: VCAP_SERVICES
             valueFrom:
               secretKeyRef:
-                name: vcap-services
+                name: ${APP_NAME}-vcap-services
                 key: vcap
           livenessProbe:
             tcpSocket:
@@ -29,7 +29,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: vcap-services
+  name: ${APP_NAME}-vcap-services
 type: Opaque
 data:
   vcap: ${VCAP}
