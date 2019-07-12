@@ -116,7 +116,7 @@ In this second test case, you will migrate content that is retrieved directly fr
 		cd /cf-transformation/migrate
 		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e openshift -b ibm-websphere-liberty
 
-2. Open the `result.html` file in subdirectory `cfliberty2/hello-world/defaultServer` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/JavaHelloWorldApp`.<br>![HelloWorld](images/liberty2.png)
+2. Open the `result.html` file in subdirectory `cfliberty2/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/JavaHelloWorldApp`.<br>![HelloWorld](images/liberty2.png)
 
 ## SpringBoot application (jar file) accessed from a Git repository
 

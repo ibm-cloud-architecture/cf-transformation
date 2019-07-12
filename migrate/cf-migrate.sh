@@ -34,7 +34,7 @@ fi
 
 if [ -z "$target_env" ]; then
   target_env="openshift"
-else 
+else
   if [[ "$target_env" != "iks" ]] && [[ "$target_env" != "icp" ]] && [[ "$target_env" != "openshift" ]]; then
     echo "Invalid target environment, only openshift, iks or icp are supported at this time"
     exit 997
@@ -45,7 +45,7 @@ fi
 # Migrate cf application
 
 #########################################
-# Create conversion directory 
+# Create conversion directory
 #########################################
 
 if [ -z "$target_path" ]; then
@@ -57,7 +57,7 @@ fi
 if [[ -d "$target_path" ]] && [[ -z "$force" ]]; then
   read -r -p "The path ${target_path} exists. It will be overwritten. Are you sure? [y/N] " response
   case "$response" in
-    [yY][eE][sS]|[yY]) 
+    [yY][eE][sS]|[yY])
         ;;
     *)
         exit 990
@@ -67,7 +67,7 @@ elif [[ -f "$target_path" ]]; then
   echo "Target path exists as a file, aborting"
   exit 990
 fi
- 
+
 
 CODEDIR=$( dirname "${BASH_SOURCE[0]}" )
 if [ $CODEDIR == "." ]; then
@@ -145,9 +145,9 @@ fi
 # Create docker file
 #########################################
 
-if [[ -f "${source_path}/manifest.yml" ]]; then 
+if [[ -f "${source_path}/manifest.yml" ]]; then
   app_name=$(cat ${source_path}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
-elif [[ -f "${TARGETDIR}/manifest.yml" ]]; then 
+elif [[ -f "${TARGETDIR}/manifest.yml" ]]; then
   app_name=$(cat ${TARGETDIR}/manifest.yml | grep "name:" | awk -F ':' '{print $2}' | xargs)
 else
   app_name=""
@@ -174,6 +174,8 @@ fi
 echo "Finish creating dockerfile ..."
 
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
+genfiles="$genfiles<LI>deploy-kube/deploy-kube.yaml: Definitions for deploying your application to IKS or ICP</LI>"
+genfiles="$genfiles<LI>deploy-openshift/deploy-template.yaml: Definitions for deploying your application to OpenShift</LI>"
 
 $CODEDIR/create_yaml.sh ${TARGETDIR} ${app_name} ${buildpack}
 

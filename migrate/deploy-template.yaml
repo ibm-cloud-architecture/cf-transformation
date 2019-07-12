@@ -66,6 +66,8 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
+      labels:
+        app: ${APP_NAME}
       name: ${APP_NAME}-vcap-services
     type: Opaque
     data:
