@@ -74,9 +74,6 @@ The tool produces an HTML file called `result.html` in the conversion directory.
 
 ![HTML result](docs/images/result.PNG)
 
+For reporting error or providing input for this tool, open an issue in 
+[New issue](https://github.com/ibm-cloud-architecture/cf-transformation/issues/new)
 
-The following links contain more specific output and recommendations for different application types (Buildpacks):
-
-- [ibm-websphere-liberty - Coming Soon](docs/liberty.md)
-- [nodejs - Coming Soon](docs/nodejs.md)
-- [java springboot - Coming Soon](docs/java.md)
