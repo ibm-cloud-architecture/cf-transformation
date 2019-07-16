@@ -10,5 +10,4 @@ The exercises below describe migrating each of the application types above to th
 
 - [OpenShift](openshift.md)
 - [IBM Kubernetes Service](iks.md)
-- [IBM Cloud Private](icp.md)
 
