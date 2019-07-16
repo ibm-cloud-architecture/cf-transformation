@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+<TITLE>CF migration toolbox</TITLE>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="cfmigrate.css"> 
+
+</HEAD>
+<BODY onload="showMigrate()">
+<H1>CloudFoundry Migration Tool</H1>
+  <DIV ID="formMain">
+    <P>VCAP_SERVICES: <textarea name="vcap" id="vcap" cols="40" rows="5" value="{}"></textarea></P>
+    <P>Source repo: <input name="source" id="source" size=70 type="text"></P>
+    <P>Processing path: <input name="tmpdir" id="tmpdir" type="text" value="/data"></P>
+    <P>BuildPack: <select name="BuildPack" id="buildpack">
+      <option value="ibm-websphere-liberty" selected>Liberty</option>
+      <option value="nodejs">NodeJS</option>
+      <option value="java">Java</option>
+    </select></P>
+    <P>Target environment: <select name="Target" id="target">
+      <option value="openshift" selected>OpenShift</option>
+      <option value="iks">IBM Kubernetes Services</option>
+      <option value="icp">IBM Cloud Private</option>
+    </select></P>
+  
+    <button onclick="runMigrate()" id="runMigrate" >Run Migration</button>
+  </DIV>
+  <DIV ID="formOutput">
+     <DIV ID="stdout"></DIV>
+     <button onclick="showResult()" id="showResult" >Show Result</button>
+     <input ID="resFile" type="hidden" value=""/>
+  </DIV>
+  <DIV ID="result">
+     <DIV ID="resultArea"></DIV>
+     <button onclick="showMigrate()" id="showMigrate" >Run Again</button>
+  </DIV>
+ 
+<script src="/srv/jquery.min.js"></script>
+<SCRIPT>
+
+    function showResult() {
+        var res = document.getElementById("result");
+        res.style.display = "block";
+        var fou = document.getElementById("formOutput");
+        fou.style.display = "none";
+        var fmn = document.getElementById("formMain");
+        fmn.style.display = "none";
+        var rfile = document.getElementById("resFile").value;
+        $.get("/result?result="+rfile).then(function(data){
+             document.getElementById("resultArea").innerHTML = data;
+        });
+    }
+
+    function showMigrate() {
+        var res = document.getElementById("result");
+        res.style.display = "none";
+        var fou = document.getElementById("formOutput");
+        fou.style.display = "block";
+        var fmn = document.getElementById("formMain");
+        fmn.style.display = "block";
+
+        $("#showResult").attr("disabled", true);
+        $("#runMigrate").attr("disabled", false);
+    }
+
+    function runMigrate() {
+        // check fields
+        console.log("Run migrate");
+        $("#runMigrate").attr("disabled", true);
+        document.getElementById("stdout").innerHTML = "<i class='fa fa-spinner fa-spin' style='font-size:48px;color:red'></i> ";
+        vcap = document.getElementById("vcap").value;
+        if (vcap == "") {
+          vcap="{}"
+        }
+        src = document.getElementById("source").value;
+        tmp = document.getElementById("tmpdir").value;
+        type = document.getElementById("buildpack").value;
+        tgt = document.getElementById("target").value;
+        if (src != "" && tmp != "") {
+          var data = ""
+          var qstr = "src="+src+"&tmp="+tmp+"&type="+type+"&tgt="+tgt+"&vcap="+vcap;
+          var xhttp = new XMLHttpRequest();
+          xhttp.open('get', "/invoke?"+qstr);
+          xhttp.send();
+          xhttp.onprogress = function() {
+             data += this.responseText;
+             document.getElementById("stdout").innerHTML="<pre>"+data+"</pre>";
+             console.log(this.responseText);
+          }
+          xhttp.onload = function() {
+            data = this.response;
+            console.log(data);
+            document.getElementById("stdout").innerHTML="<pre>"+data+"</pre>";
+    var lines = data.split("\n");
+    var lastLine = lines[lines.length - 2];
+    console.log(lastLine);
+            // var lastLine = data.substr(data.lastIndexOf("\n")+1);
+            document.getElementById("resFile").value=lastLine;
+            $("#showResult").attr("disabled",false);
+          };
+        }
+    }
+</script>
+</BODY>
+</HTML>

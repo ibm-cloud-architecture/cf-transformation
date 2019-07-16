@@ -1,0 +1,30 @@
+body {
+    background-color: #FFFFFF;
+    font-family: sans-serif;
+}
+
+h1 {
+    color: navy;
+    text-align: center;
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+.mainBody {
+    padding: 10px;
+    border-style: double;
+    border-width: 5px;
+    border-color: lightblue;
+}
+
+#stdout {
+  border-style: single;
+  border-width: 1px;
+  border-color: blue;
+  width: 100%;
+  height: 30%;
+}
+
+i {
+font-family: fontawesome;
+}

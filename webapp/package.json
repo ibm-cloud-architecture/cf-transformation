@@ -1,0 +1,16 @@
+{
+  "name": "cfmigrate",
+  "version": "0.1.0",
+  "main": "app.js",
+  "author": "vbudi@yahoo.com",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "child-process": "^1.0.2",
+    "express": "*",
+    "json": "*",
+    "shelljs": "^0.8",
+    "request": "*"
+  }
+}

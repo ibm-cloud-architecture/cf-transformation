@@ -14,20 +14,27 @@ spec:
         - name: ${APP_ARTIFACT_ID}
           image: "${TARGET_REPO}/${TARGET_WORKSPACE}/${APP_ARTIFACT_ID}:${TAG}"
           imagePullPolicy: Always
-          volumeMounts:
-          - mountPath: /var/run/secrets/binding-refarch-${SERVICE_NAME}
-            name: binding-refarch-${SERVICE_NAME}
+          env:
+          - name: VCAP_SERVICES
+            valueFrom:
+              secretKeyRef:
+                name: ${APP_NAME}-vcap-services
+                key: vcap
           livenessProbe:
             tcpSocket:
               port: 9080
             initialDelaySeconds: 20
             periodSeconds: 60
-      volumes:
-      - name: binding-refarch-${SERVICE_NAME}
-        secret:
-          defaultMode: 420
-          secretName: "binding-${SERVICE_NAME}"
-
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: ${APP_NAME}
+  name: ${APP_NAME}-vcap-services
+type: Opaque
+data:
+  vcap: ${VCAP}
 ---
 apiVersion: v1
 kind: Service
@@ -42,4 +49,19 @@ spec:
   ports:
    - protocol: TCP
      port: 9080
-     nodePort: 30310
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${APP_NAME}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: ${INGRESS}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ${APP_NAME}-service
+          servicePort: 9080

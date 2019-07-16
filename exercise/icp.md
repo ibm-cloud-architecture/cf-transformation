@@ -1,6 +1,6 @@
-# Migrating Cloud Foundry applications to OpenShift
+# Migrating Cloud Foundry applications to IBM Cloud Private
 
-This exercise describes using the migration tool to migrate each of the following example applications to OpenShift:
+This exercise describes using the migration tool to migrate each of the following example applications to IBM Cloud Private:
 
 - Liberty hello-world application accessed from downloaded `exemplar` sub-directory
 - Liberty hello-world application accessed from a Git repository
@@ -80,32 +80,33 @@ As mentioned at the beginning of the exercise, you deploy the application to Clo
 		ibmcloud cf env abc-hello-world | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 		cat vcap.json
 
-### Running the migration tool and deploying the application to OpenShift
+### Running the migration tool and deploying the application to IBM Cloud Private
 
 The last stage of the migration is performed for the specific target environment. 
 
 1. Run the migration command:
 
-		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e openshift -b ibm-websphere-liberty
+		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e icp -b ibm-websphere-liberty
 
 	The output should be similar to the following:<br>![Command output](images/006-convert.png)
 
 2. Open the generated `result.html` file using a Web browser (remember the path mapping that you did in the first step of preparing the environment). The `result.html` file will be in the subdirectory `cfliberty1/hello-world/defaultServer`.<br>![Instruction](images/007-result.png)
 
-10. Go directly to the section **Deploying application to openshift** and perform the step-by-step instructions there. Note that you must specify the following values:
+10. Go directly to the section **Deploying application to IBM Cloud Private** and perform the step-by-step instructions there. Note that you must specify the following values:
 
 	- Repository host (REPOHOST). You can use `docker.io` to use DockerHub
-	- Namespace (REPOSPACE). Your own namespace in DockerHub (similar to your userID)
-	- Openshift cluster host URL (SERVER)
+	- Namespace (REPOSPACE). Your namespace (in DockerHub, it is similar to your userID) that you define in the repository
+	- Your IBM Cloud Private master node (SERVER)
+	- Your IBM Cloud Private proxy node (PROXY)
 
-	Note that for login to the OpenShift cluster using the `oc login` command, you may be asked to get a login token from the server. You can easily get this token from a login session to the OpenShift Web Console GUI. The commands that are listed in steps 2 and later are using the environment variables that are set above. If you have defined these environment variables, you should be able to run the commands as-is, directly cut-and-pasted from the `result.html` browser page to the bash prompt of the cfmigrationtool container. 
+	The commands that are listed in steps 2 and later are using the environment variables that are set above. If you have defined these environment variables, you should be able to run the commands as-is, directly cut-and-pasted from the `result.html` browser page to the bash prompt of the cfmigrationtool container. 
 
 	![Output1](images/007-1-output.png)
 	![Output2](images/007-2-output.png)
 	![Output3](images/007-3-output.png)
 
 
-4. Once the migration is completed, check the route that is created and open a browser window to `https://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you had for the application on Cloud Foundry.<br>![Sample app OC](images/008-sampleapp.png)
+4. Once the migration is completed, use the proxy node hostname for the route and open a browser window to `https://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you had for the application on Cloud Foundry.<br>![Sample app OC](images/008-sampleapp.png)
 
 ## Liberty hello-world application accessed from a Git repository
 
@@ -114,9 +115,9 @@ In this second test case, you will migrate content that is retrieved directly fr
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e openshift -b ibm-websphere-liberty
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e icp -b ibm-websphere-liberty
 
-2. Open the `result.html` file in subdirectory `cfliberty2/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/JavaHelloWorldApp`.<br>![HelloWorld](images/liberty2.png)
+2. Open the `result.html` file in subdirectory `cfliberty2/hello-world/defaultServer` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Cloud Private. Check the URL `https://<routehost>/JavaHelloWorldApp`.<br>![HelloWorld](images/liberty2.png)
 
 ## SpringBoot application (jar file) accessed from a Git repository
 
@@ -125,9 +126,9 @@ In this third test case, you will migrate a SpringBoot REST application from a g
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e openshift -b java
+		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e icp -b java
 
-2. Open the `result.html` file in subdirectory `cfjava/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/customer`. <br>![Customer app](images/customer.png)
+2. Open the `result.html` file in subdirectory `cfjava/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Cloud Private. Check the URL `https://<routehost>/customer`. <br>![Customer app](images/customer.png)
 
 
 ## Node.js application accessed from a Git repository
@@ -137,9 +138,9 @@ In this fourth test case, you will migrate a Node.js application from a git repo
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/IBM-Cloud/node-helloworld -t /data/cfnodejs -e openshift -b nodejs
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/node-helloworld -t /data/cfnodejs -e icp -b nodejs
 
-2. Open the `result.html` file in subdirectory `cfnodejs/node-helloworld`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/`.<br>![Node](images/nodehello.png)
+2. Open the `result.html` file in subdirectory `cfnodejs/node-helloworld`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Cloud Private. Check the URL `https://<routehost>/`.<br>![Node](images/nodehello.png)
 
 ## Node.js application with a Cloudant database backend service
  
@@ -157,7 +158,7 @@ In this last test case, we demonstrate another example that uses a backend servi
 		ibmcloud app push
 
  - The application and its Cloudant service will be deployed automatically. The route is shown at the end of the deployment. <br>![deploy](images/deploycld.png)
- - Open the application and try uploading any file from your local system to the organizer application. Use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same Cloudant backend service from OpenShift. <br>![organizer](images/organizer.png)
+ - Open the application and try uploading any file from your local system to the organizer application. Use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same Cloudant backend service from IBM Cloud Private. <br>![organizer](images/organizer.png)
 
 2. Extract the VCAP_SERVICES:
 
@@ -166,7 +167,7 @@ In this last test case, we demonstrate another example that uses a backend servi
 		
 3. Run the migration tool:
 
-		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e openshift -b nodejs
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e icp -b nodejs
 
-2. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded in step 1 on Cloud Foundry exists and is displayed from the database.
+2. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Cloud Private. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded in step 1 on Cloud Foundry exists and is displayed from the database.
 

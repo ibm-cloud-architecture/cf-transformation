@@ -42,6 +42,9 @@ else
   xmlstarlet ed \
     -d /server/httpEndpoint \
     server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
+  xmlstarlet ed \
+    -d /server/application \
+    server.xml | xmlstarlet fo -s 2 > t1.xml; cp t1.xml server.xml
 fi
   echo "Performing server.xml mods"
   # insert webContainer
