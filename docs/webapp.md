@@ -5,7 +5,7 @@ The Web application for the CF migration tool allows you to use a Web browser to
 - git
 - node.js and npm
 
-You could also use the provided docker image *ibmcloudacademy/cfmigrationtool*.
+You can also use the provided Docker image *ibmcloudacademy/cfmigrationtool*.
 
 To use the Web application, perform the following:
 
