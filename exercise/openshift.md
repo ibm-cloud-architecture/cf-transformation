@@ -33,7 +33,7 @@ You run these preparation steps only once. There is no need to redo these steps 
 
 1. Run the provided Docker container. You should have Docker installed and running on your system. Specify an empty local directory path to be used as the conversion working directory. The following command connects you to a bash shell inside the migration tool container. 
 
-		docker run -v <your_local_path>:/data -v /var/run/docker.sock:/var/run/docker.sock -it ibmcloudacademy/cfmigrationtool bash
+		docker run -p 8000:8000 -v <your_local_path>:/data -v /var/run/docker.sock:/var/run/docker.sock -it ibmcloudacademy/cfmigrationtool bash
 
 
 2. From the bash shell of the Docker container, clone the repository containing the migration tool and sample application code:

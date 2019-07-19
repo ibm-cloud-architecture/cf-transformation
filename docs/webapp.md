@@ -24,7 +24,7 @@ To use the Web application, perform the following:
 4. Start the application:
 
 		node app.js
-	or
+	or (if you are running the tool in the Docker container)
 
 		nodejs app.js
 
