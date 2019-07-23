@@ -147,7 +147,7 @@ In this last test case, we demonstrate another example that uses a backend servi
 
 1. Clone the application, and deploy the Cloudant database backend service and the application. Assuming you are still logged on to IBM Cloud Public, the following commands are used.
 
-		git clone https://github.com/IBM-Cloud/nodejs-cloudant.git
+		git clone https://github.com/IBM-Cloud/nodejs-cloudant
 		cd nodejs-cloudant
 		ibmcloud service create cloudantNoSQLDB Lite sample-nodejs-cloudant-cloudantNoSQLDB
 		ibmcloud service list
