@@ -1,8 +1,8 @@
 # Running the migration tool using a Docker container 
 
 We have provided a Docker container that you can use to run the migration tool.
-Using a docker container allows you to run the tool without having to install all the prerequisite software on your own machine. This docker container will share the host docker environment to run `docker` command. 
-Assuming that you have docker running, do the following steps to run the migration tool from the container:
+Using the Docker container allows you to run the tool without having to install all the prerequisite software on your own machine. This container will share your host Docker environment to run `docker` commands. 
+Assuming that you have Docker running, do the following steps to run the migration tool from the container:
 
 
 1. Get the container image:
@@ -19,5 +19,5 @@ Assuming that you have docker running, do the following steps to run the migrati
 
 		git clone https://github.com/ibm-cloud-architecture/cf-transformation
 
-5. You can use the command line version of this tool in `/cf-transformation/migrate` or the Web application version in `/cf-transformation/webapp` (see [webapp](webapp.md))
+5. You can use the command line version of this tool in `/cf-transformation/migrate` or the Web application version in `/cf-transformation/webapp` (see [webapp](webapp.md) for details).
 
