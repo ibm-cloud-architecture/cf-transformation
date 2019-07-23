@@ -174,7 +174,7 @@ fi
 echo "Finish creating dockerfile ..."
 
 genfiles="$genfiles<LI>Dockerfile: files for creating Docker image for your application</LI>"
-genfiles="$genfiles<LI>deploy-kube/deploy-kube.yaml: Definitions for deploying your application to IKS or ICP</LI>"
+genfiles="$genfiles<LI>deploy-kube/deploy-kube.yaml: Definitions for deploying your application to IKS</LI>"
 genfiles="$genfiles<LI>deploy-openshift/deploy-template.yaml: Definitions for deploying your application to OpenShift</LI>"
 
 $CODEDIR/create_yaml.sh ${TARGETDIR} ${app_name} ${buildpack}
